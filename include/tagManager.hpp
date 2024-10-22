@@ -11,7 +11,10 @@ class tagManager{
         
 
     public:
+        tagManager() = delete;
+        virtual ~tagManager()=default;
 
+        tagManager(std::string FileName, bool Verbose);
 
 };
 
