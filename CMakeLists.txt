@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)		# never set less 3.12 min version
-project(TestTagLib)
+project(bttManager)
 
 # Build type is debug by default
 # call cmake .. -DCMAKE_BUILD_TYPE=Release to change to relase
@@ -21,8 +21,12 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 include_directories(include)
 
-add_executable(testTagLib src/testTagLib.cpp)
-target_link_libraries(testTagLib TagLib::tag)
+add_executable(bttManager src/bttManager_main.cpp
+                          src/lib_bttManager.cpp
+                          src/tagManager.cpp)
+
+target_link_libraries(bttManager TagLib::tag)
+
 
 
 
