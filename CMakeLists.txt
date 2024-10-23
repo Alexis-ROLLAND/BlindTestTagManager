@@ -24,9 +24,15 @@ include_directories(include)
 add_executable(bttManager src/bttManager_main.cpp
                           src/lib_bttManager.cpp
                           src/tagManager.cpp)
-
 target_link_libraries(bttManager TagLib::tag)
 
 
+add_executable(test_tagManager  src/test_tagManager.cpp
+                                src/tagManager.cpp) 
+target_link_libraries(test_tagManager TagLib::tag)
+
+add_executable(dumpTags src/dumpTags.cpp
+                        src/tagManager.cpp) 
+target_link_libraries(dumpTags TagLib::tag)      
 
 

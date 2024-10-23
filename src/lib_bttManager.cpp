@@ -15,7 +15,7 @@ void initApp(){
 }
 
 void    parseInput(int argc, char *argv[]){
-
+    
     try{
         
         auto result = options.parse(argc,argv);
@@ -23,7 +23,8 @@ void    parseInput(int argc, char *argv[]){
 
         std::string FileName = result["filename"].as<std::string>();
         
-        
+        tagManager manager{FileName, Verbose};
+
         if (result.count("list")) listTags();
     }
     catch(const cxxopts::exceptions::exception &e){

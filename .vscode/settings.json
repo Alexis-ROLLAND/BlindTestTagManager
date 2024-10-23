@@ -43,7 +43,8 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "typeinfo": "cpp",
-        "text_encoding": "cpp"
+        "text_encoding": "cpp",
+        "system_error": "cpp"
     },
     
 }

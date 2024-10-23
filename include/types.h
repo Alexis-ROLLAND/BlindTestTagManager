@@ -6,4 +6,6 @@
 
 
 
+
+
 #endif /*   __BTT_MANAGER_TYPES_H__ */
