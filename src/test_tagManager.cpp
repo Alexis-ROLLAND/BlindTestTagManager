@@ -31,7 +31,7 @@ TEST_CASE("tagManager Ctor - Validation de l'existence du fichier & dump"){
     }
 }
 
-TEST_CASE("getTag"){
+TEST_CASE("get/set Trad Tags"){
     REQUIRE(std::filesystem::exists(validFileName) == true);
     tagManager  myManager{validFileName,false};
 
@@ -60,9 +60,9 @@ TEST_CASE("getTag"){
     CHECK_NOTHROW(Year = myManager.getDate());
     CHECK(Year == 6666);
 
-    tagManager::btPeriod Periode;
-    CHECK_NOTHROW(Periode = myManager.getPeriode());
-    std::println("Periode (convertie en int) = {:d}", static_cast<int>(Periode));
+    tagManager::btPeriod Periode{};
+    CHECK_NOTHROW(Periode = myManager.getPeriod());
+    std::println("Periode (convertie en int) = {:d}", std::to_underlying(Periode));
 
     
     CHECK_NOTHROW(myManager.setLangue(tagManager::btLanguage::INT));
@@ -75,3 +75,67 @@ TEST_CASE("getTag"){
 }
 
 
+TEST_CASE("get / set Extra Tags (Flags)"){
+    REQUIRE(std::filesystem::exists(validFileName) == true);
+    tagManager  myManager{validFileName,false};
+
+    bool Flag = true;
+
+    CHECK_NOTHROW(myManager.setMovieSoundTrackFlag(false));
+    REQUIRE(Flag == true);
+    Flag = myManager.isMovieSoundTrack();
+    CHECK(Flag == false);
+    
+    CHECK_NOTHROW(myManager.setMovieSoundTrackFlag(true));
+    REQUIRE(Flag == false);
+    Flag = myManager.isMovieSoundTrack();
+    CHECK(Flag == true);
+
+    REQUIRE(Flag == true);
+    Flag = myManager.isTvShow();
+    CHECK(Flag == false);
+    CHECK_NOTHROW(myManager.setTvShowFlag(true));
+    REQUIRE(Flag == false);
+    Flag = myManager.isTvShow();
+    CHECK(Flag == true);
+
+    REQUIRE(Flag == true);
+    Flag = myManager.isMasterPiece();
+    CHECK(Flag == false);
+    CHECK_NOTHROW(myManager.setMasterPieceFlag(true));
+    REQUIRE(Flag == false);
+    Flag = myManager.isMasterPiece();
+    CHECK(Flag == true);
+
+    REQUIRE(Flag == true);
+    Flag = myManager.isSbig();
+    CHECK(Flag == false);
+    CHECK_NOTHROW(myManager.setSbigFlag(true));
+    REQUIRE(Flag == false);
+    Flag = myManager.isSbig();
+    CHECK(Flag == true);
+
+    myManager.dump();
+}
+
+TEST_CASE("get / set Extra games tags (EXTRA_TITLE...)"){
+    REQUIRE(std::filesystem::exists(validFileName) == true);
+    tagManager  myManager{validFileName,false};
+
+    std::string xtraTitleRef="Back to the future";
+    myManager.setExtraTitle(xtraTitleRef);
+    std::string xtraTitle{};
+    CHECK_NOTHROW(xtraTitle = myManager.getExtraTitle());
+    CHECK(xtraTitleRef == xtraTitle);
+
+    CHECK_NOTHROW(myManager.setExtraDate(1973));
+    unsigned int xtrDate{};
+    CHECK_NOTHROW(xtrDate = myManager.getExtraDate());
+    CHECK(xtrDate == 1973);
+
+    tagManager::btPeriod Periode{};
+    CHECK_NOTHROW(Periode = myManager.getExtraPeriod());
+    std::println("Extra Periode (convertie en int) = {:d}", std::to_underlying(Periode));
+
+    myManager.dump();
+}
