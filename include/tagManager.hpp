@@ -12,6 +12,14 @@
 #include <fileref.h>
 #include <tpropertymap.h>
 
+const   std::string   tagTitre{"TITLE"};
+const   std::string   tagInterprete{"ARTIST"};
+const   std::string   tagDate{"DATE"};
+const   std::string   tagLangue{"LANGUAGE"};
+const   std::string   tagExtra{"EXTRA"};
+const   std::string   tagExtraTitle{"EXTRA_TITLE"};
+const   std::string   tagExtraDate{"EXTRA_DATE"};
+
 
 class tagManagerException : public std::exception{
     private:
@@ -53,13 +61,7 @@ class BadTagValueException : public tagManagerException{
 
 class tagManager{
     public:
-        enum class btTag{   TITRE,      /**< Titre du morceau */
-                            INTERPRETE, /**< Interprète du morceau */
-                            PERIODE,    /**< Période, basé sur l'année du morceau */
-                            LANGUE,     /**< FRAnçais ou INTernational */
-                            EXTRA,      /**< Flags for the Extra games */
-                            EXTRA_TITLE /**< Movie or TV Show Title */
-        };
+        
 
         enum class btPeriod{    OLDIES,     /**< Avant 1970 (DATE < 1970) */
                                 SEVENTIES,  /**< DATE entre 1970 et 1979 */
@@ -100,7 +102,7 @@ class tagManager{
 
         [[nodiscard]]   bool isTagExisting(const std::string &Tag) const noexcept;
 
-        [[nodiscard]]   uint8_t getExtraTagValue() const;
+        [[nodiscard]]   uint8_t getExtraTagValue(bool CreateEmptyIfNotExist = false);
         void    setExtraTagValue(uint8_t Byte);                    
 
         [[nodiscard]]   btPeriod    toPeriod(unsigned int year) const noexcept;
@@ -120,14 +122,14 @@ class tagManager{
 
         
 
-        [[nodiscard]]   std::string getTitre() const {if (this->tags.find("TITLE") == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value("TITLE").toString().to8Bit();};
+        [[nodiscard]]   std::string getTitre() const {if (this->tags.find(tagTitre) == this->tags.end()) throw TagNotInTheFileException{};
+                                                        else return this->tags.value(tagTitre).toString().to8Bit();};
         
-        [[nodiscard]]   std::string getExtraTitle() const {if (this->tags.find("EXTRA_TITLE") == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value("EXTRA_TITLE").toString().to8Bit();};
+        [[nodiscard]]   std::string getExtraTitle() const {if (this->tags.find(tagExtraTitle) == this->tags.end()) throw TagNotInTheFileException{};
+                                                        else return this->tags.value(tagExtraTitle).toString().to8Bit();};
 
-        [[nodiscard]]   std::string getInterprete() const {if (this->tags.find("ARTIST") == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value("ARTIST").toString().to8Bit();};
+        [[nodiscard]]   std::string getInterprete() const {if (this->tags.find(tagInterprete) == this->tags.end()) throw TagNotInTheFileException{};
+                                                        else return this->tags.value(tagInterprete).toString().to8Bit();};
 
         [[nodiscard]]   btPeriod        getPeriod() const {return this->toPeriod(this->getDate());};
         [[nodiscard]]   btPeriod        getExtraPeriod() const {return this->toPeriod(this->getExtraDate());};
@@ -142,17 +144,19 @@ class tagManager{
         void    setTitre(std::string titre);
         void    setExtraTitle(std::string titre);
 
-        [[nodiscard]] bool    isMovieSoundTrack() const;
+        [[nodiscard]] bool    isMovieSoundTrack() ;
         void    setMovieSoundTrackFlag(bool isMovieSt);
 
-        [[nodiscard]] bool    isTvShow() const;
+        [[nodiscard]] bool    isTvShow() ;
         void    setTvShowFlag(bool isTvs);
 
-        [[nodiscard]] bool    isMasterPiece() const;
+        [[nodiscard]] bool    isMasterPiece() ;
         void    setMasterPieceFlag(bool isMstpce);
 
-        [[nodiscard]] bool    isSbig() const;
+        [[nodiscard]] bool    isSbig() ;
         void    setSbigFlag(bool isSb);
+
+        std::string     makeFileName() ;
 
         bool    update() {this->getFile().setProperties(this->tags); return this->getFile().save();};
 };

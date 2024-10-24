@@ -138,4 +138,26 @@ TEST_CASE("get / set Extra games tags (EXTRA_TITLE...)"){
     std::println("Extra Periode (convertie en int) = {:d}", std::to_underlying(Periode));
 
     myManager.dump();
+
+}
+
+TEST_CASE("makeFileName"){
+    REQUIRE(std::filesystem::exists(validFileName) == true);
+    tagManager  myManager{validFileName,false};
+    myManager.dump();
+    std::string NewName{};
+
+    SUBCASE("Trad Tags only"){
+        CHECK_NOTHROW(NewName = myManager.makeFileName());
+        std::println("Nouveau nom de fichier : {}",NewName);
+    }
+
+    SUBCASE("Extra tag (movie) only"){
+        myManager.setMovieSoundTrackFlag(true);
+        myManager.setExtraTitle("Back to the future");
+        myManager.setExtraDate(1984);
+        CHECK_NOTHROW(NewName = myManager.makeFileName());
+        std::println("Nouveau nom de fichier : {}",NewName);
+    }
+    
 }
