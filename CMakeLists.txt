@@ -21,16 +21,22 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 include_directories(include)
 
+# Choose wich executable will be build : cmake --build . -t  
+
+# main executable : cmake --build . -t bttManager
 add_executable(bttManager src/bttManager_main.cpp
                           src/lib_bttManager.cpp
                           src/tagManager.cpp)
 target_link_libraries(bttManager TagLib::tag)
 
-
+# test app for tagManager class
+# cmake --build . -t test_tagManager
 add_executable(test_tagManager  src/test_tagManager.cpp
                                 src/tagManager.cpp) 
 target_link_libraries(test_tagManager TagLib::tag)
 
+# Very simple app listing the tags & values
+# cmake --build . -t dumpTags
 add_executable(dumpTags src/dumpTags.cpp
                         src/tagManager.cpp) 
 target_link_libraries(dumpTags TagLib::tag)      

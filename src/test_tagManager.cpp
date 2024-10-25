@@ -116,6 +116,8 @@ TEST_CASE("get / set Extra Tags (Flags)"){
     CHECK(Flag == true);
 
     myManager.dump();
+    
+    myManager.update();
 }
 
 TEST_CASE("get / set Extra games tags (EXTRA_TITLE...)"){
@@ -139,6 +141,7 @@ TEST_CASE("get / set Extra games tags (EXTRA_TITLE...)"){
 
     myManager.dump();
 
+    myManager.update();
 }
 
 TEST_CASE("makeFileName"){
