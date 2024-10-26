@@ -35,10 +35,18 @@ add_executable(test_tagManager  src/test_tagManager.cpp
                                 src/tagManager.cpp) 
 target_link_libraries(test_tagManager TagLib::tag)
 
+# test app for bttParser class
+#
+add_executable(test_bttParser   src/test_bttParser.cpp
+                                src/bttParser.cpp) 
+                                
+
+
 # Very simple app listing the tags & values
 # cmake --build . -t dumpTags
 add_executable(dumpTags src/dumpTags.cpp
                         src/tagManager.cpp) 
 target_link_libraries(dumpTags TagLib::tag)      
+
 
 

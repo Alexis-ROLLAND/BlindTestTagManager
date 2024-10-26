@@ -7,8 +7,6 @@
 #include <exception>
 #include <filesystem>
 
-/** inclusion of cxxopts argument parser */
-#include "cxxopts.hpp"      
 
 /** Specific types inclusion */
 #include "types.h"
@@ -16,9 +14,6 @@
 
 void    initApp();
 
-void    parseInput(int argc, char *argv[]);
-
-void    listTags();
 
 
 #endif  /*  __LIB_BTT_MANAGER_HPP__ */
