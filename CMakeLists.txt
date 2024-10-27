@@ -26,6 +26,7 @@ include_directories(include)
 # main executable : cmake --build . -t bttManager
 add_executable(bttManager src/bttManager_main.cpp
                           src/lib_bttManager.cpp
+                          src/bttParser.cpp
                           src/tagManager.cpp)
 target_link_libraries(bttManager TagLib::tag)
 
@@ -35,12 +36,11 @@ add_executable(test_tagManager  src/test_tagManager.cpp
                                 src/tagManager.cpp) 
 target_link_libraries(test_tagManager TagLib::tag)
 
-# test app for bttParser class
-#
-add_executable(test_bttParser   src/test_bttParser.cpp
-                                src/bttParser.cpp) 
-                                
-
+# main executable : cmake --build . -t bttManager
+add_executable(test_bttManager  src/test_bttManager.cpp
+                                src/bttParser.cpp
+                                src/tagManager.cpp)
+target_link_libraries(test_bttManager TagLib::tag)
 
 # Very simple app listing the tags & values
 # cmake --build . -t dumpTags
