@@ -29,6 +29,14 @@ class bttParser{
             EXTRA_TITLE,
             ARTIST,
             DATE,
+            EXTRA_DATE,
+            LANGUAGE,
+            IS_MOVIE,
+            IS_TVSHOW,
+            IS_MASTERPIECE,
+            IS_SBIG,
+            GET_PERIOD,    
+            GET_EXTRA_PERIOD,    
             FILENAME
         };
 
@@ -39,6 +47,15 @@ class bttParser{
             {arg_id_t::EXTRA_TITLE,{"extra-title","Gets or Sets the EXTRA_TITLE tag"}},
             {arg_id_t::ARTIST,{"artist","Gets or Sets the ARTIST tag (interprètre)"}},
             {arg_id_t::DATE,{"date","Gets or Sets the DATE tag"}},
+            {arg_id_t::EXTRA_DATE,{"extra-date","Gets or Sets the EXTRA_DATE tag"}},
+            {arg_id_t::LANGUAGE,{"language","Gets or Sets the LANGUAGE tag"}},
+            {arg_id_t::IS_MOVIE,{"ismovie","Gets or Sets the EXTRA_TAG value for the MOVIE indicator (YES/NO)"}},
+            {arg_id_t::IS_TVSHOW,{"istvshow","Gets or Sets the EXTRA_TAG value for the TVSHOW indicator (YES/NO)"}},
+            {arg_id_t::IS_MASTERPIECE,{"ismasterpiece","Gets or Sets the EXTRA_TAG value for the MASTERPIECE indicator (YES/NO)"}},
+            {arg_id_t::IS_SBIG,{"issbig","Gets or Sets the EXTRA_TAG value for the SBIG indicator (YES/NO)"}},
+
+            {arg_id_t::GET_PERIOD,{"get-period","Gets period information (\"OLDIES\", \"SEVENTIES\"...)"}},
+            {arg_id_t::GET_EXTRA_PERIOD,{"get-extra-period","Gets extra-period information (\"OLDIES\", \"SEVENTIES\"...)"}},
             {arg_id_t::FILENAME,{"filename", "The filename to process"}}
         };
 
@@ -65,6 +82,11 @@ class bttParser{
         std::string getCmdArg(arg_id_t id) {return this->tabArgs.at(id).first;};
         std::string getCmdDesc(arg_id_t id) {return this->tabArgs.at(id).second;};
 
+        void    dump_handler();
+        void    get_period_handler();
+        void    get_extra_period_handler();
+        void    title_handler();
+        void    extra_title_handler();
     public:
         bttParser() = delete;
         virtual ~bttParser() = default;

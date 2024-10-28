@@ -46,7 +46,15 @@
         "text_encoding": "cpp",
         "system_error": "cpp",
         "deque": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "array": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "ctime": "cpp",
+        "span": "cpp",
+        "streambuf": "cpp",
+        "variant": "cpp",
+        "print": "cpp"
     },
     
 }
