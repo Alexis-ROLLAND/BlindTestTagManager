@@ -1,6 +1,7 @@
 #ifndef __BTT_PARSER_HPP__
 #define __BTT_PARSER_HPP__
 
+#include <iostream>
 #include <filesystem>
 #include <print>
 
@@ -23,6 +24,7 @@ const   char    PROGRAM_DESC[]="Blint Test Tag Manager software";
 class bttParser{
     private:
         enum class arg_id_t{
+            HELP,
             DUMP,
             NO_SAVE,
             TITLE,
@@ -41,6 +43,7 @@ class bttParser{
         };
 
         const std::map<arg_id_t, arg_desc_t> tabArgs{
+            {arg_id_t::HELP,{"help","Prints help"}},
             {arg_id_t::DUMP,{"dump","Dump all file tags"}},
             {arg_id_t::NO_SAVE,{"no-save","Test mode. The file won't be written"}},
             {arg_id_t::TITLE,{"title","Gets or Sets the TITLE tag (titre)"}},
@@ -82,11 +85,22 @@ class bttParser{
         std::string getCmdArg(arg_id_t id) {return this->tabArgs.at(id).first;};
         std::string getCmdDesc(arg_id_t id) {return this->tabArgs.at(id).second;};
 
+        void    help_handler();
         void    dump_handler();
         void    get_period_handler();
         void    get_extra_period_handler();
         void    title_handler();
         void    extra_title_handler();
+        void    artist_handler();
+        void    language_handler();
+        void    ismovie_handler();
+        void    istvshow_handler();
+        void    ismasterpiece_handler();
+        void    issbig_handler();
+        void    date_handler();
+        void    extra_date_handler();
+        void    update_handler();
+
     public:
         bttParser() = delete;
         virtual ~bttParser() = default;

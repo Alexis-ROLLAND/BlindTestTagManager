@@ -8,7 +8,7 @@ int main(int argc, char* argv[]){
 
     bttParser   parser{argc,argv};
 
-    parser.processArgs();
+    //parser.processArgs();
 
 
 

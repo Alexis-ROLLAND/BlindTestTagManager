@@ -156,9 +156,10 @@ class tagManager{
         [[nodiscard]] bool    isSbig() ;
         void    setSbigFlag(bool isSb);
 
-        std::string     makeFileName() ;
+        [[nodiscard]]   std::string     makeFileName() ;
 
-        bool    update() {this->getFile().setProperties(this->tags); return this->getFile().save();};
+
+        [[nodiscard]]   bool    update() {this->getFile().setProperties(this->tags); return this->getFile().save();};
 };
 
 #endif  /* __TAG_MANAGER_HPP__ */
