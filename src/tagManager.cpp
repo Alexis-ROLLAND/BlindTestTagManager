@@ -1,9 +1,8 @@
 #include "tagManager.hpp"
 
-tagManager::tagManager(const std::string &FileName, bool Verbose):FileName{FileName},Verbose{Verbose}{
+tagManager::tagManager(const std::string &FileName):FileName{FileName}{
     if (std::filesystem::exists(this->getFileName()) == false) throw FileNotFoundException{};
-    if (this->getVerbose()) std::println("Opening File {}",this->getFileName());
-
+    
     this->file = TagLib::FileRef(this->getFileName().c_str(),false);
     if (this->getFile().isNull()) throw FileErrorException{};
 
@@ -16,25 +15,62 @@ tagManager::tagManager(const std::string &FileName, bool Verbose):FileName{FileN
 
 }
 
-void    tagManager::dump() const noexcept{
+void    tagManager::dump() noexcept{
     for(auto tag : this->tags){
         std::println("{} = {}",tag.first.to8Bit(),tag.second.toString().to8Bit());
     }
 }
 
-bool tagManager::isTagExisting(const std::string &Tag) const noexcept {
+bool tagManager::isTagExisting(const std::string &Tag) noexcept {
     if (this->tags.find(Tag) == this->tags.end()) return false;
     else return true;
 }
 
-unsigned int    tagManager::getDate() const{
-    if (this->isTagExisting(tagDate) == false) throw TagNotInTheFileException{};  
+std::string tagManager::getTitre(bool fc) {
+    if (this->isTagExisting(tagTitre)) return this->tags.value(tagTitre).toString().to8Bit();
+    
+    if (fc){
+        this->setTitre("");
+        return "";
+    }
+    else{
+        throw TagNotInTheFileException(tagTitre);
+    }
+
+}
+
+std::string tagManager::getExtraTitle(bool fc){
+    if (this->isTagExisting(tagExtraTitle)) return this->tags.value(tagExtraTitle).toString().to8Bit();
+    
+    if (fc){
+        this->setExtraTitle("");
+        return "";
+    }
+    else{
+        throw TagNotInTheFileException(tagExtraTitle);
+    }  
+}
+
+std::string tagManager::getInterprete(bool fc){
+    if (this->isTagExisting(tagInterprete)) return this->tags.value(tagInterprete).toString().to8Bit();
+    
+    if (fc){
+        this->setInterprete("");
+        return "";
+    }
+    else{
+        throw TagNotInTheFileException(tagInterprete);
+    }     
+}
+
+unsigned int    tagManager::getDate(bool fc) {
+    if (this->isTagExisting(tagDate) == false) throw TagNotInTheFileException{tagDate};  
     std::string strDate = this->tags.value(tagDate).toString().to8Bit();
     return std::stoi(strDate);
 }
 
-unsigned int    tagManager::getExtraDate() const{
-    if (this->isTagExisting(tagExtraDate) == false) throw TagNotInTheFileException{};  
+unsigned int    tagManager::getExtraDate() {
+    if (this->isTagExisting(tagExtraDate) == false) throw TagNotInTheFileException{tagExtraDate};  
     std::string strDate = this->tags.value(tagExtraDate).toString().to8Bit();
     return std::stoi(strDate);
 }
@@ -48,8 +84,8 @@ tagManager::btPeriod    tagManager::toPeriod(unsigned int year) const noexcept{
     else return btPeriod::NOVELTY;
 }
 
-tagManager::btLanguage      tagManager::getLangue() const{
-    if (this->isTagExisting(tagLangue) == false) throw TagNotInTheFileException{};   
+tagManager::btLanguage      tagManager::getLangue() {
+    if (this->isTagExisting(tagLangue) == false) throw TagNotInTheFileException{tagLangue};   
     std::string strLanguage = this->tags.value(tagLangue).toString().to8Bit(); 
     if (strLanguage == "FRA") return tagManager::btLanguage::FRA;
     else if (strLanguage == "INT") return tagManager::btLanguage::INT;
@@ -102,7 +138,7 @@ uint8_t tagManager::getExtraTagValue(bool CreateEmptyIfNotExist) {
     uint8_t Byte;
 
     if (this->isTagExisting(tagExtra) == false) {
-        if (CreateEmptyIfNotExist == false) throw TagNotInTheFileException{}; 
+        if (CreateEmptyIfNotExist == false) throw TagNotInTheFileException{tagExtra}; 
         else this->setExtraTagValue(0x00);
     }
     
@@ -224,9 +260,6 @@ std::string     tagManager::makeFileName() {
     std::string Name{};
     tagManager::btPeriod    Periode;
 
-    uint8_t Byte = this->getExtraTagValue(true);
-    if (this->getVerbose()) std::println("EXTRA Tag Value = {:02X}",Byte);
-
     if ( (this->isMovieSoundTrack()) || (this->isTvShow())) Periode = this->getExtraPeriod();
     else    Periode = this->getPeriod();
 
@@ -249,16 +282,17 @@ std::string     tagManager::makeFileName() {
 
     Name += std::format("{:02X}", this->getExtraTagValue());
     Name += "_";
-    Name += this->getInterprete();
+    Name += this->getInterprete(false);
     Name += "_";
-    Name += this->getTitre();
+    Name += this->getTitre(false);
 
     if ( (this->isMovieSoundTrack()) || (this->isTvShow()) ) {
         Name += "_";
-        Name += this->getExtraTitle(); 
+        Name += this->getExtraTitle(false); 
     }
 
     Name += ".mp3";
     
     return Name;
 }
+

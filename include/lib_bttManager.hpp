@@ -11,10 +11,13 @@
 /** Specific types inclusion */
 #include "types.h"
 #include "tagManager.hpp" 
+#include "bttParser.hpp"
 
-void    initApp();
 
 
+void    initApp(int argc, char *argv[]);
+
+void    runApp();
 
 #endif  /*  __LIB_BTT_MANAGER_HPP__ */
 

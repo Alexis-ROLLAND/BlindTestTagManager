@@ -15,11 +15,12 @@ using   arg_desc_t = std::pair<std::string,std::string>; /** Pair for full argum
 //----------------------------------------------------------------------------
 /** Exceptions */
 class bttParserFileNotFoundException : public std::exception{};
+class bttParserHelpAskedException : public std::exception{};
 //----------------------------------------------------------------------------
 
+extern  const   char    PROGRAM_NAME[];
+extern const   char    PROGRAM_DESC[];
 
-const   char    PROGRAM_NAME[]="bttManager";;
-const   char    PROGRAM_DESC[]="Blint Test Tag Manager software";
 
 class bttParser{
     private:
@@ -27,6 +28,7 @@ class bttParser{
             HELP,
             DUMP,
             NO_SAVE,
+            FORCE_CREATE,
             TITLE,
             EXTRA_TITLE,
             ARTIST,
@@ -46,6 +48,7 @@ class bttParser{
             {arg_id_t::HELP,{"help","Prints help"}},
             {arg_id_t::DUMP,{"dump","Dump all file tags"}},
             {arg_id_t::NO_SAVE,{"no-save","Test mode. The file won't be written"}},
+            {arg_id_t::FORCE_CREATE,{"force-creat","Force the creation of a non-existing tag in read mode"}},
             {arg_id_t::TITLE,{"title","Gets or Sets the TITLE tag (titre)"}},
             {arg_id_t::EXTRA_TITLE,{"extra-title","Gets or Sets the EXTRA_TITLE tag"}},
             {arg_id_t::ARTIST,{"artist","Gets or Sets the ARTIST tag (interprètre)"}},
@@ -72,6 +75,10 @@ class bttParser{
 
         std::string filename{};
         bool    FileHasBeenChanged{false};
+
+        bool    ForceCreate{false};
+        void    setForceCreate() {this->ForceCreate = true;};
+        bool    getForceCreate() {return this->ForceCreate;};
                 
         void    setFileName(const std::string &fname) noexcept {this->filename = fname;};
 
@@ -87,6 +94,7 @@ class bttParser{
 
         void    help_handler();
         void    dump_handler();
+        void    force_create_handler();
         void    get_period_handler();
         void    get_extra_period_handler();
         void    title_handler();
@@ -105,6 +113,16 @@ class bttParser{
         bttParser() = delete;
         virtual ~bttParser() = default;
 
+        /**
+         * @brief   Standard CTOR for bttParser
+         * 
+         * @param   int argc : argument count
+         * @param   char* argv[] : argument values
+         * 
+         * @throw   cxxopts::exceptions::option_has_no_value if filename is not provided
+         * @throw   bttParserFileNotFoundException if Filemane refers to a non-existent file
+         * @throw   bttParserHelpAskedException if help is asked
+         */
         bttParser(int argc, char *argv[]);
 
         std::string getFileName() noexcept {return this->filename;};

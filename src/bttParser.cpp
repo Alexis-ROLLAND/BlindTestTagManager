@@ -1,16 +1,20 @@
 #include "bttParser.hpp"
 
+
+
+
 //----------------------------------------------------------------------------
 bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
 
     cxxopts::value<std::string>()->default_value("");
 
-    
+    /** Adding options (arguments) */
     this->options.add_options()
         /** arguments with no values */
         (this->getCmdArg(arg_id_t::HELP),this->getCmdDesc(arg_id_t::HELP))
         (this->getCmdArg(arg_id_t::DUMP),this->getCmdDesc(arg_id_t::DUMP))
         (this->getCmdArg(arg_id_t::NO_SAVE),this->getCmdDesc(arg_id_t::NO_SAVE))
+        (this->getCmdArg(arg_id_t::FORCE_CREATE),this->getCmdDesc(arg_id_t::FORCE_CREATE))
         (this->getCmdArg(arg_id_t::GET_PERIOD),this->getCmdDesc(arg_id_t::GET_PERIOD))
         (this->getCmdArg(arg_id_t::GET_EXTRA_PERIOD),this->getCmdDesc(arg_id_t::GET_EXTRA_PERIOD))
 
@@ -29,38 +33,34 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         
         /** positionnal argument (filename) */
         (this->getCmdArg(arg_id_t::FILENAME),this->getCmdDesc(arg_id_t::FILENAME), cxxopts::value<std::string>());
-
+    /** END making options structure */
     
 
     /**  Parse positionnal arguments    */
     this->options.parse_positional(this->getCmdArg(arg_id_t::FILENAME));
     
-    
     /**  Parse options the usual way    */
     this->result = this->options.parse(this->argc, this->argv);
-    std::println("standard Options parsed");
-
+    
     /** Is the help argument provided ? */
-    auto    nbhelp = this->count(this->getCmdArg(arg_id_t::HELP)); 
-    std::println("Number of help options : {}",nbhelp);
-
     if (this->count(this->getCmdArg(arg_id_t::HELP))) {
-        std::println("Calling help handler");
-        this->help_handler();
+        this->help_handler();   /** throws bttParserHelpAskedException  exception */
     }
     
-
+    /** Try to get filename from CLI */
+    this->setFileName(this->getStrResult(this->getCmdArg(arg_id_t::FILENAME))); /** throws cxxopts::exceptions::no_such_option if option is not set */
+    
     /** Check file's existence  */ 
-    //this->setFileName(this->getStrResult(this->getCmdArg(arg_id_t::FILENAME)));
-    //if (!std::filesystem::exists(this->getFileName())) throw bttParserFileNotFoundException{};
-
+    if (!std::filesystem::exists(this->getFileName())) throw bttParserFileNotFoundException{};
+        
     /** Create tagManager (RAII) */
-    //this->manager = std::make_unique<tagManager>(this->getFileName());
+    this->manager = std::make_unique<tagManager>(this->getFileName());
 }
 //----------------------------------------------------------------------------
 void    bttParser::processArgs(){
     std::string tmpString{};
     if (this->count(this->getCmdArg(arg_id_t::DUMP))) this->dump_handler(); /** Dump tags  */
+    if (this->count(this->getCmdArg(arg_id_t::FORCE_CREATE))) this->force_create_handler(); /** Dump tags  */
     if (this->count(this->getCmdArg(arg_id_t::GET_PERIOD))) this->get_period_handler(); /** get-period management part */
     if (this->count(this->getCmdArg(arg_id_t::GET_EXTRA_PERIOD))) this->get_extra_period_handler(); /** get-extra-period management part */
     if (this->count(this->getCmdArg(arg_id_t::TITLE))) this->title_handler();   /** Title management part */
@@ -82,14 +82,17 @@ void    bttParser::processArgs(){
 /** local Handlers */
 //----------------------------------------------------------------------------
 void    bttParser::help_handler(){
-    std::println(std::cout,"Help handler");
     std::println(std::cout,"{}",options.help());
-    //exit(EXIT_SUCCESS);    
+    throw bttParserHelpAskedException{};    
 }
 //----------------------------------------------------------------------------
 void    bttParser::dump_handler(){
     this->manager->dump();
     exit(EXIT_SUCCESS);
+}
+//----------------------------------------------------------------------------
+void    bttParser::force_create_handler(){
+    this->setForceCreate();
 }
 //----------------------------------------------------------------------------
 void    bttParser::get_period_handler(){
@@ -124,36 +127,35 @@ void    bttParser::get_extra_period_handler(){
 void    bttParser::title_handler(){
     
     if (this->getStrResult(this->getCmdArg(arg_id_t::TITLE)) == ""){
-        std::println("Titre (get) = {}",this->manager->getTitre());
+        std::println(std::cout,"Titre=[{}]",this->manager->getTitre(this->getForceCreate()));
     }
     else{
         this->manager->setTitre(this->getStrResult(this->getCmdArg(arg_id_t::TITLE)));
         this->setFileHasBeenChanged(true);
-        std::println("Titre (set) = {}",this->manager->getTitre());
+        std::println("OK:Titre set to [{}]",this->manager->getTitre(this->getForceCreate()));
     }
-    
 }
 //----------------------------------------------------------------------------
 void    bttParser::extra_title_handler(){
 
     if (this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_TITLE)) == ""){
-        std::println("Extra Titre (get) = {}",this->manager->getExtraTitle());
+        std::println("Extra Titre (get) = {}",this->manager->getExtraTitle(this->getForceCreate()));
     }
     else{
         this->manager->setExtraTitle(this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_TITLE)));
         this->setFileHasBeenChanged(true);
-        std::println("Extra Titre (set) = {}",this->manager->getExtraTitle());
+        std::println("Extra Titre (set) = {}",this->manager->getExtraTitle(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------
 void    bttParser::artist_handler(){
     if (this->getStrResult(this->getCmdArg(arg_id_t::ARTIST)) == ""){
-        std::println("Interprète (get) = {}",this->manager->getInterprete());
+        std::println("Interprète (get) = {}",this->manager->getInterprete(this->getForceCreate()));
     }
     else{
         this->manager->setInterprete(this->getStrResult(this->getCmdArg(arg_id_t::ARTIST)));
         this->setFileHasBeenChanged(true);
-        std::println("Interprète (set) = {}",this->manager->getInterprete());
+        std::println("Interprète (set) = {}",this->manager->getInterprete(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------

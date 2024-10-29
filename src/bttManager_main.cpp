@@ -3,10 +3,12 @@
 
 
 int main(int argc, char *argv[]) {
-    initApp();
     
+    initApp(argc, argv);
+    
+    runApp();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 

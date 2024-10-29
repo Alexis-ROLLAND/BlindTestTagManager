@@ -51,7 +51,8 @@ class UnknownTagException : public tagManagerException{
 
 class TagNotInTheFileException : public tagManagerException{
     public:
-        TagNotInTheFileException() : tagManagerException("Tag provided is not in the file metadata."){};
+        const std::string tag{}; 
+        TagNotInTheFileException(const std::string tag) : tagManagerException("Tag provided is not in the file metadata."),tag{tag}{};
 };
 
 class BadTagValueException : public tagManagerException{
@@ -84,23 +85,18 @@ class tagManager{
     private:
     
         const std::string   FileName{};
-        const bool  Verbose{false};
+        
         TagLib::FileRef file{};
         TagLib::PropertyMap tags{};
 
-        /**
-         * @brief   Getter for the "Verbose" attribute  
-         * @return  bool
-         */
-        [[nodiscard]]   bool getVerbose() const noexcept {return this->Verbose;};
-
+        
         /**
          * @brief   Getter for the file attribute, wich is a reference to the mp3 file
          * @return  TagLib::FileRef
          */
         [[nodiscard]]   TagLib::FileRef getFile() const noexcept {return this->file;};
 
-        [[nodiscard]]   bool isTagExisting(const std::string &Tag) const noexcept;
+        [[nodiscard]]   bool isTagExisting(const std::string &Tag) noexcept;
 
         [[nodiscard]]   uint8_t getExtraTagValue(bool CreateEmptyIfNotExist = false);
         void    setExtraTagValue(uint8_t Byte);                    
@@ -114,28 +110,21 @@ class tagManager{
          * @brief   Standard CTOR
          * @param   
          */
-        tagManager(const std::string &FileName, bool Verbose=false);
+        tagManager(const std::string &FileName);
 
-        [[nodiscard]]   std::string getFileName() const noexcept {return this->FileName;};
-        [[nodiscard]]   std::size_t getNbTags() const noexcept {return this->tags.size();};
-        void    dump() const noexcept;
+        [[nodiscard]]   std::string getFileName()  noexcept {return this->FileName;};
+        [[nodiscard]]   std::size_t getNbTags()  noexcept {return this->tags.size();};
+        void    dump()  noexcept;
 
-        
+        [[nodiscard]]   std::string getTitre(bool fc) ;
+        [[nodiscard]]   std::string getExtraTitle(bool fc); 
+        [[nodiscard]]   std::string getInterprete(bool fc);
 
-        [[nodiscard]]   std::string getTitre() const {if (this->tags.find(tagTitre) == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value(tagTitre).toString().to8Bit();};
-        
-        [[nodiscard]]   std::string getExtraTitle() const {if (this->tags.find(tagExtraTitle) == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value(tagExtraTitle).toString().to8Bit();};
-
-        [[nodiscard]]   std::string getInterprete() const {if (this->tags.find(tagInterprete) == this->tags.end()) throw TagNotInTheFileException{};
-                                                        else return this->tags.value(tagInterprete).toString().to8Bit();};
-
-        [[nodiscard]]   btPeriod        getPeriod() const {return this->toPeriod(this->getDate());};
-        [[nodiscard]]   btPeriod        getExtraPeriod() const {return this->toPeriod(this->getExtraDate());};
-        [[nodiscard]]   unsigned int    getDate() const ;
-        [[nodiscard]]   unsigned int    getExtraDate() const ;
-        [[nodiscard]]   btLanguage      getLangue() const;
+        [[nodiscard]]   btPeriod        getPeriod()  {return this->toPeriod(this->getDate());};
+        [[nodiscard]]   btPeriod        getExtraPeriod()  {return this->toPeriod(this->getExtraDate());};
+        [[nodiscard]]   unsigned int    getDate(bool fc);
+        [[nodiscard]]   unsigned int    getExtraDate()  ;
+        [[nodiscard]]   btLanguage      getLangue() ;
 
         void    setLangue(btLanguage Langue);
         void    setDate(unsigned int year);
