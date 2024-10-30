@@ -21,7 +21,6 @@ class bttParserHelpAskedException : public std::exception{};
 extern  const   char    PROGRAM_NAME[];
 extern const   char    PROGRAM_DESC[];
 
-
 class bttParser{
     private:
         enum class arg_id_t{
@@ -40,7 +39,8 @@ class bttParser{
             IS_MASTERPIECE,
             IS_SBIG,
             GET_PERIOD,    
-            GET_EXTRA_PERIOD,    
+            GET_EXTRA_PERIOD,   
+            DELETE_TAG, 
             FILENAME
         };
 
@@ -48,7 +48,7 @@ class bttParser{
             {arg_id_t::HELP,{"help","Prints help"}},
             {arg_id_t::DUMP,{"dump","Dump all file tags"}},
             {arg_id_t::NO_SAVE,{"no-save","Test mode. The file won't be written"}},
-            {arg_id_t::FORCE_CREATE,{"force-creat","Force the creation of a non-existing tag in read mode"}},
+            {arg_id_t::FORCE_CREATE,{"force-create","Force the creation of a non-existing tag in read mode"}},
             {arg_id_t::TITLE,{"title","Gets or Sets the TITLE tag (titre)"}},
             {arg_id_t::EXTRA_TITLE,{"extra-title","Gets or Sets the EXTRA_TITLE tag"}},
             {arg_id_t::ARTIST,{"artist","Gets or Sets the ARTIST tag (interprètre)"}},
@@ -62,6 +62,9 @@ class bttParser{
 
             {arg_id_t::GET_PERIOD,{"get-period","Gets period information (\"OLDIES\", \"SEVENTIES\"...)"}},
             {arg_id_t::GET_EXTRA_PERIOD,{"get-extra-period","Gets extra-period information (\"OLDIES\", \"SEVENTIES\"...)"}},
+
+            {arg_id_t::DELETE_TAG,{"delete-tag","Deletes a tag"}},
+
             {arg_id_t::FILENAME,{"filename", "The filename to process"}}
         };
 
@@ -108,6 +111,7 @@ class bttParser{
         void    date_handler();
         void    extra_date_handler();
         void    update_handler();
+        void    delete_tag_handler();
 
     public:
         bttParser() = delete;

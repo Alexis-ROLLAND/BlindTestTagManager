@@ -8,10 +8,9 @@ std::unique_ptr<bttParser> parser;
 void initApp(int argc, char *argv[]){
     try{
         parser=std::make_unique<bttParser>(argc,argv);
-
     }
     catch(const cxxopts::exceptions::option_has_no_value &e){
-        std::println(std::cerr,"ERROR-Filename was not provided");
+        std::println(std::cerr,"ERROR:Filename was not provided");
         exit(EXIT_FAILURE);
     }
     catch(const cxxopts::exceptions::no_such_option &e){

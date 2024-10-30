@@ -30,7 +30,10 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         /** arguments with integer values */
         (this->getCmdArg(arg_id_t::DATE),this->getCmdDesc(arg_id_t::DATE), cxxopts::value<int>()->implicit_value("9999"))
         (this->getCmdArg(arg_id_t::EXTRA_DATE),this->getCmdDesc(arg_id_t::EXTRA_DATE), cxxopts::value<int>()->implicit_value("9999"))
-        
+
+        /** Usefull arguments/commands */
+        (this->getCmdArg(arg_id_t::DELETE_TAG),this->getCmdDesc(arg_id_t::DELETE_TAG), cxxopts::value<std::string>()->implicit_value(""))
+
         /** positionnal argument (filename) */
         (this->getCmdArg(arg_id_t::FILENAME),this->getCmdDesc(arg_id_t::FILENAME), cxxopts::value<std::string>());
     /** END making options structure */
@@ -61,6 +64,7 @@ void    bttParser::processArgs(){
     std::string tmpString{};
     if (this->count(this->getCmdArg(arg_id_t::DUMP))) this->dump_handler(); /** Dump tags  */
     if (this->count(this->getCmdArg(arg_id_t::FORCE_CREATE))) this->force_create_handler(); /** Dump tags  */
+    if (this->count(this->getCmdArg(arg_id_t::DELETE_TAG))) this->delete_tag_handler(); /** Deletes a tag */
     if (this->count(this->getCmdArg(arg_id_t::GET_PERIOD))) this->get_period_handler(); /** get-period management part */
     if (this->count(this->getCmdArg(arg_id_t::GET_EXTRA_PERIOD))) this->get_extra_period_handler(); /** get-extra-period management part */
     if (this->count(this->getCmdArg(arg_id_t::TITLE))) this->title_handler();   /** Title management part */
@@ -128,34 +132,37 @@ void    bttParser::title_handler(){
     
     if (this->getStrResult(this->getCmdArg(arg_id_t::TITLE)) == ""){
         std::println(std::cout,"Titre=[{}]",this->manager->getTitre(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
     }
     else{
         this->manager->setTitre(this->getStrResult(this->getCmdArg(arg_id_t::TITLE)));
         this->setFileHasBeenChanged(true);
-        std::println("OK:Titre set to [{}]",this->manager->getTitre(this->getForceCreate()));
+        std::println(std::cout,"OK:Titre set to [{}]",this->manager->getTitre(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------
 void    bttParser::extra_title_handler(){
 
     if (this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_TITLE)) == ""){
-        std::println("Extra Titre (get) = {}",this->manager->getExtraTitle(this->getForceCreate()));
+        std::println(std::cout,"ExtraTitre=[{}]",this->manager->getExtraTitle(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
     }
     else{
         this->manager->setExtraTitle(this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_TITLE)));
         this->setFileHasBeenChanged(true);
-        std::println("Extra Titre (set) = {}",this->manager->getExtraTitle(this->getForceCreate()));
+        std::println(std::cout,"OK:ExtraTitre set to [{}]",this->manager->getExtraTitle(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------
 void    bttParser::artist_handler(){
     if (this->getStrResult(this->getCmdArg(arg_id_t::ARTIST)) == ""){
-        std::println("Interprète (get) = {}",this->manager->getInterprete(this->getForceCreate()));
+        std::println(std::cout,"Interprete=[{}]",this->manager->getInterprete(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
     }
     else{
         this->manager->setInterprete(this->getStrResult(this->getCmdArg(arg_id_t::ARTIST)));
         this->setFileHasBeenChanged(true);
-        std::println("Interprète (set) = {}",this->manager->getInterprete(this->getForceCreate()));
+        std::println(std::cout,"OK:Interprète set to [{}]",this->manager->getInterprete(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------
@@ -164,27 +171,27 @@ void    bttParser::language_handler(){
     tagManager::btLanguage Language;
     
     if (this->getStrResult(this->getCmdArg(arg_id_t::LANGUAGE)) == ""){
-        Language = this->manager->getLangue();
+        Language = this->manager->getLangue(this->getForceCreate());
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
         switch(Language){
-            case tagManager::btLanguage::FRA : std::println("Language (get) = FRA");break;
-            case tagManager::btLanguage::INT : std::println("Language (get) = INT");break;    
-            default : std::println("LANGUAGE ERROR");break;
+            case tagManager::btLanguage::FRA : std::println(std::cout,"Language=[FRA]");break;
+            case tagManager::btLanguage::INT : std::println(std::cout,"Language=[INT]");break;    
+            default : std::println(std::cerr,"ERROR:LANGUAGE ERROR");break;
         }
-        
     }
     else{
         tmpString = this->getStrResult(this->getCmdArg(arg_id_t::LANGUAGE));
         if (tmpString == "FRA") {
             this->manager->setLangue(tagManager::btLanguage::FRA);
-            std::println("Language set to FRA");
+            std::println(std::cout,"OK:Language set to [FRA]");
             this->setFileHasBeenChanged(true);
         }
         else if (tmpString == "INT") {
             this->manager->setLangue(tagManager::btLanguage::INT);
-            std::println("Language set to INT");
+            std::println(std::cout,"OK:Language set to [INT]");
             this->setFileHasBeenChanged(true);
         }
-        else std::println("LANGUAGE SET ERROR");
+        else std::println(std::cerr,"ERROR:LANGUAGE SET ERROR");
     }   
 }
 //----------------------------------------------------------------------------
@@ -282,25 +289,37 @@ void    bttParser::issbig_handler(){
 //----------------------------------------------------------------------------
 void    bttParser::date_handler(){
     if (this->getIntResult(this->getCmdArg(arg_id_t::DATE)) == 9999){
-        std::println("Date (get) = {0:d}",this->manager->getDate());
+        std::println(std::cout,"Date=[{0:d}]",this->manager->getDate(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
     }
     else{
         this->manager->setDate(this->getIntResult(this->getCmdArg(arg_id_t::DATE)));
         this->setFileHasBeenChanged(true);
-        std::println("Date (set) = {0:d}",this->manager->getDate());
+        std::println(std::cout,"OK:Date set to [{0:d}]",this->manager->getDate(false));
     }
 }
 //----------------------------------------------------------------------------
 void    bttParser::extra_date_handler(){
 
     if (this->getIntResult(this->getCmdArg(arg_id_t::EXTRA_DATE)) == 9999){
-        std::println("Extra-Date (get) = {0:d}",this->manager->getExtraDate());
+        std::println("ExtraDate=[{0:d}]",this->manager->getExtraDate(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
     }
     else{
         this->manager->setExtraDate(this->getIntResult(this->getCmdArg(arg_id_t::EXTRA_DATE)));
         this->setFileHasBeenChanged(true);
-        std::println("Extra-Date (set) = {0:d}",this->manager->getExtraDate());
+        std::println("OK:Extra-Date set to [{0:d}]",this->manager->getExtraDate(false));
     }
+}
+//----------------------------------------------------------------------------
+void    bttParser::delete_tag_handler(){
+    std::println("Delete Tag Handler");
+    std::string tag{};
+
+    tag = this->getStrResult(this->getCmdArg(arg_id_t::DELETE_TAG));
+    std::println("Tag to delete : {}",tag);
+    this->manager->deleteTag(tag);
+    this->setFileHasBeenChanged(true);
 }
 //----------------------------------------------------------------------------
 void    bttParser::update_handler(){

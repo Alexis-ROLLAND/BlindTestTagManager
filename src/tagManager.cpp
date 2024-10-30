@@ -10,9 +10,6 @@ tagManager::tagManager(const std::string &FileName):FileName{FileName}{
 
     this->tags = this->getFile().properties();
     if (this->tags.isEmpty()) throw NoTagsInFileException{};
-
-
-
 }
 
 void    tagManager::dump() noexcept{
@@ -26,12 +23,19 @@ bool tagManager::isTagExisting(const std::string &Tag) noexcept {
     else return true;
 }
 
+void    tagManager::deleteTag(const std::string &tag){
+    if (this->isTagExisting(tag)){
+        this->tags.erase(tag);
+    }
+
+}
+
 std::string tagManager::getTitre(bool fc) {
     if (this->isTagExisting(tagTitre)) return this->tags.value(tagTitre).toString().to8Bit();
     
     if (fc){
-        this->setTitre("");
-        return "";
+        this->setTitre(DEFAULT_STRING_VALUE);
+        return DEFAULT_STRING_VALUE;
     }
     else{
         throw TagNotInTheFileException(tagTitre);
@@ -43,8 +47,8 @@ std::string tagManager::getExtraTitle(bool fc){
     if (this->isTagExisting(tagExtraTitle)) return this->tags.value(tagExtraTitle).toString().to8Bit();
     
     if (fc){
-        this->setExtraTitle("");
-        return "";
+        this->setExtraTitle(DEFAULT_STRING_VALUE);
+        return DEFAULT_STRING_VALUE;
     }
     else{
         throw TagNotInTheFileException(tagExtraTitle);
@@ -55,8 +59,8 @@ std::string tagManager::getInterprete(bool fc){
     if (this->isTagExisting(tagInterprete)) return this->tags.value(tagInterprete).toString().to8Bit();
     
     if (fc){
-        this->setInterprete("");
-        return "";
+        this->setInterprete(DEFAULT_STRING_VALUE);
+        return DEFAULT_STRING_VALUE;
     }
     else{
         throw TagNotInTheFileException(tagInterprete);
@@ -64,15 +68,27 @@ std::string tagManager::getInterprete(bool fc){
 }
 
 unsigned int    tagManager::getDate(bool fc) {
-    if (this->isTagExisting(tagDate) == false) throw TagNotInTheFileException{tagDate};  
-    std::string strDate = this->tags.value(tagDate).toString().to8Bit();
-    return std::stoi(strDate);
+    if (this->isTagExisting(tagDate)) return std::stoi(this->tags.value(tagDate).toString().to8Bit());
+    
+    if (fc) {   
+        this->setDate(INVALID_DATE_VALUE);    /** Set to "invalide value" */
+        return INVALID_DATE_VALUE;
+    }
+    else{
+        throw TagNotInTheFileException(tagDate); 
+    }
 }
 
-unsigned int    tagManager::getExtraDate() {
-    if (this->isTagExisting(tagExtraDate) == false) throw TagNotInTheFileException{tagExtraDate};  
-    std::string strDate = this->tags.value(tagExtraDate).toString().to8Bit();
-    return std::stoi(strDate);
+unsigned int    tagManager::getExtraDate(bool fc) {
+    if (this->isTagExisting(tagExtraDate)) return std::stoi(this->tags.value(tagExtraDate).toString().to8Bit());
+    
+    if (fc) {   
+        this->setExtraDate(INVALID_DATE_VALUE);    /** Set to "invalide value" */
+        return INVALID_DATE_VALUE;
+    }
+    else{
+        throw TagNotInTheFileException(tagExtraDate); 
+    }
 }
 
 tagManager::btPeriod    tagManager::toPeriod(unsigned int year) const noexcept{
@@ -84,12 +100,22 @@ tagManager::btPeriod    tagManager::toPeriod(unsigned int year) const noexcept{
     else return btPeriod::NOVELTY;
 }
 
-tagManager::btLanguage      tagManager::getLangue() {
-    if (this->isTagExisting(tagLangue) == false) throw TagNotInTheFileException{tagLangue};   
-    std::string strLanguage = this->tags.value(tagLangue).toString().to8Bit(); 
-    if (strLanguage == "FRA") return tagManager::btLanguage::FRA;
-    else if (strLanguage == "INT") return tagManager::btLanguage::INT;
-    else throw BadTagValueException{}; 
+tagManager::btLanguage      tagManager::getLangue(bool fc){
+    if (this->isTagExisting(tagLangue)) {
+        std::string strLanguage = this->tags.value(tagLangue).toString().to8Bit();    
+        if (strLanguage == "FRA") return tagManager::btLanguage::FRA;
+        else if (strLanguage == "INT") return tagManager::btLanguage::INT;
+        else throw BadTagValueException{}; 
+    }
+    
+    if (fc) {   
+        this->setLangue(tagManager::btLanguage::FRA);    /** Set to "FRA" by default */
+        return tagManager::btLanguage::FRA;
+    }
+    else{
+        throw TagNotInTheFileException(tagLangue); 
+    }
+
 }
 
 void    tagManager::setLangue(tagManager::btLanguage Langue){
@@ -105,6 +131,7 @@ void    tagManager::setLangue(tagManager::btLanguage Langue){
 }
 
 void    tagManager::setDate(unsigned int year){
+    //std::println("setDate called");
     TagLib::String Value = std::to_string(year);
     if (this->isTagExisting(tagDate) == false) this->tags.insert(tagDate,Value);   
     else this->tags.replace(tagDate,Value); 
@@ -141,7 +168,6 @@ uint8_t tagManager::getExtraTagValue(bool CreateEmptyIfNotExist) {
         if (CreateEmptyIfNotExist == false) throw TagNotInTheFileException{tagExtra}; 
         else this->setExtraTagValue(0x00);
     }
-    
     
     std::string strExtra = this->tags.value(tagExtra).toString().to8Bit(); /** The 2 digits hexadecimal value is copied into strExtra */
 
@@ -273,7 +299,7 @@ std::string     tagManager::makeFileName() {
         default: Name += "x";break;
     }
   
-    tagManager::btLanguage Langue = this->getLangue();
+    tagManager::btLanguage Langue = this->getLangue(false);
     switch(Langue){
         case tagManager::btLanguage::FRA : Name+="F";break;
         case tagManager::btLanguage::INT : Name+="I";break;

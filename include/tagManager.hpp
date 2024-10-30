@@ -20,6 +20,8 @@ const   std::string   tagExtra{"EXTRA"};
 const   std::string   tagExtraTitle{"EXTRA_TITLE"};
 const   std::string   tagExtraDate{"EXTRA_DATE"};
 
+const   unsigned int  INVALID_DATE_VALUE{9999}; 
+const   std::string   DEFAULT_STRING_VALUE{"default_string_do_not_use"};      
 
 class tagManagerException : public std::exception{
     private:
@@ -120,11 +122,11 @@ class tagManager{
         [[nodiscard]]   std::string getExtraTitle(bool fc); 
         [[nodiscard]]   std::string getInterprete(bool fc);
 
-        [[nodiscard]]   btPeriod        getPeriod()  {return this->toPeriod(this->getDate());};
-        [[nodiscard]]   btPeriod        getExtraPeriod()  {return this->toPeriod(this->getExtraDate());};
+        [[nodiscard]]   btPeriod        getPeriod()  {return this->toPeriod(this->getDate(false));};
+        [[nodiscard]]   btPeriod        getExtraPeriod()  {return this->toPeriod(this->getExtraDate(false));};
         [[nodiscard]]   unsigned int    getDate(bool fc);
-        [[nodiscard]]   unsigned int    getExtraDate()  ;
-        [[nodiscard]]   btLanguage      getLangue() ;
+        [[nodiscard]]   unsigned int    getExtraDate(bool fc);
+        [[nodiscard]]   btLanguage      getLangue(bool fc);
 
         void    setLangue(btLanguage Langue);
         void    setDate(unsigned int year);
@@ -145,10 +147,12 @@ class tagManager{
         [[nodiscard]] bool    isSbig() ;
         void    setSbigFlag(bool isSb);
 
+        void    deleteTag(const std::string &tag);
+
         [[nodiscard]]   std::string     makeFileName() ;
 
-
         [[nodiscard]]   bool    update() {this->getFile().setProperties(this->tags); return this->getFile().save();};
+
 };
 
 #endif  /* __TAG_MANAGER_HPP__ */
