@@ -101,6 +101,8 @@ void    bttParser::force_create_handler(){
 //----------------------------------------------------------------------------
 void    bttParser::get_period_handler(){
     std::string tmpString{};
+    bool error{false};
+
     switch(this->manager->getPeriod()){
         case tagManager::btPeriod::OLDIES : tmpString="OLDIES";break;
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
@@ -108,13 +110,15 @@ void    bttParser::get_period_handler(){
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
         case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
         case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
-        default : tmpString = "PERIOD ERROR";break;
+        default : tmpString = "ERROR:PERIOD ERROR";error = true;break;
     }
-    std::println("Period = {}",tmpString);
+    if (!error) std::println(std::cout,"Period=[{}]",tmpString);
+    else std::println(std::cerr,"{}",tmpString);
 }
 //----------------------------------------------------------------------------
 void    bttParser::get_extra_period_handler(){
     std::string tmpString{};
+    bool error{false};
     switch(this->manager->getExtraPeriod()){
         case tagManager::btPeriod::OLDIES : tmpString="OLDIES";break;
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
@@ -122,10 +126,10 @@ void    bttParser::get_extra_period_handler(){
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
         case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
         case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
-        default : tmpString = "EXTRA PERIOD ERROR";break;
+        default : tmpString = "ERROR:EXTRA PERIOD ERROR";error = true;break;
     }
-    std::println("Extra-Period = {}",tmpString);
-    
+    if (!error) std::println(std::cout,"Extra-Period=[{}]",tmpString);
+    else std::println(std::cerr,"{}",tmpString);
 }
 //----------------------------------------------------------------------------
 void    bttParser::title_handler(){
@@ -199,22 +203,23 @@ void    bttParser::ismovie_handler(){
     std::string tmpString{};
 
     if (this->getStrResult(this->getCmdArg(arg_id_t::IS_MOVIE)) == ""){
-        if (this->manager->isMovieSoundTrack() == true) std::println("ismovie = YES");
-        else std::println("ismovie = NO");
+        if (this->manager->isMovieSoundTrack(this->getForceCreate()) == true) std::println(std::cout,"ismovie=YES");
+        else std::println(std::cout,"ismovie=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
     }
     else{
         tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_MOVIE));
         if (tmpString == "YES"){
             this->manager->setMovieSoundTrackFlag(true);
-            std::println("ISMOVIE flag set to 1");
+            std::println(std::cout,"OK:ISMOVIE flag set to 1");
             this->setFileHasBeenChanged(true);
         }
         else if (tmpString == "NO"){
             this->manager->setMovieSoundTrackFlag(false);
-            std::println("ISMOVIE flag set to 0");
+            std::println(std::cout,"OK:ISMOVIE flag set to 0");
             this->setFileHasBeenChanged(true);  
         }
-        else std::println("ISMOVIE SET ERROR");
+        else std::println(std::cerr,"ERROR:ISMOVIE SET ERROR");
     }
 }
 //----------------------------------------------------------------------------
@@ -222,22 +227,23 @@ void    bttParser::istvshow_handler(){
     std::string tmpString{};
 
     if (this->getStrResult(this->getCmdArg(arg_id_t::IS_TVSHOW)) == ""){
-        if (this->manager->isTvShow() == true) std::println("istvshow = YES");
-        else std::println("istvshow = NO");
+        if (this->manager->isTvShow(this->getForceCreate()) == true) std::println(std::cout,"istvshow=YES");
+        else std::println(std::cout,"istvshow=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
     }
     else{
         tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_TVSHOW));
         if (tmpString == "YES"){
             this->manager->setTvShowFlag(true);
-            std::println("ISTVSHOW flag set to 1");
+            std::println(std::cout,"OK:ISTVSHOW flag set to 1");
             this->setFileHasBeenChanged(true);
         }
         else if (tmpString == "NO"){
             this->manager->setTvShowFlag(false);
-            std::println("ISTVSHOW flag set to 0");
+            std::println(std::cout,"OK:ISTVSHOW flag set to 0");
             this->setFileHasBeenChanged(true);  
         }
-        else std::println("ISTVSHOW SET ERROR");
+        else std::println(std::cerr,"ERROR:ISTVSHOW SET ERROR");
     }
 }
 //----------------------------------------------------------------------------
@@ -245,22 +251,23 @@ void    bttParser::ismasterpiece_handler(){
     std::string tmpString{};
    
     if (this->getStrResult(this->getCmdArg(arg_id_t::IS_MASTERPIECE)) == ""){
-        if (this->manager->isMasterPiece() == true) std::println("ismasterpiece = YES");
-        else std::println("ismasterpiece = NO");
+        if (this->manager->isMasterPiece(this->getForceCreate()) == true) std::println(std::cout,"ismasterpiece=YES");
+        else std::println(std::cout,"ismasterpiece=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
     }
     else{
         tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_MASTERPIECE));
         if (tmpString == "YES"){
             this->manager->setMasterPieceFlag(true);
-            std::println("ISMASTERPICE flag set to 1");
+            std::println(std::cout,"OK:ISMASTERPICE flag set to 1");
             this->setFileHasBeenChanged(true);
         }
         else if (tmpString == "NO"){
             this->manager->setMasterPieceFlag(false);
-            std::println("ISMASTERPIECE flag set to 0");
+            std::println(std::cout,"OK:ISMASTERPIECE flag set to 0");
             this->setFileHasBeenChanged(true);  
         }
-        else std::println("ISMASTERPIECE SET ERROR");
+        else std::println(std::cerr,"ERROR:ISMASTERPIECE SET ERROR");
     }
 }
 //----------------------------------------------------------------------------
@@ -268,22 +275,23 @@ void    bttParser::issbig_handler(){
     std::string tmpString{};
 
     if (this->getStrResult(this->getCmdArg(arg_id_t::IS_SBIG)) == ""){
-        if (this->manager->isSbig() == true) std::println("issbig = YES");
-        else std::println("issbig = NO");
+        if (this->manager->isSbig(this->getForceCreate()) == true) std::println(std::cout,"issbig=YES");
+        else std::println(std::cout,"issbig=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
     }
     else{
         tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_SBIG));
         if (tmpString == "YES"){
             this->manager->setSbigFlag(true);
-            std::println("ISSBIG flag set to 1");
+            std::println(std::cout,"OK:ISSBIG flag set to 1");
             this->setFileHasBeenChanged(true);
         }
         else if (tmpString == "NO"){
             this->manager->setSbigFlag(false);
-            std::println("ISSBIG flag set to 0");
+            std::println(std::cout,"OK:ISSBIG flag set to 0");
             this->setFileHasBeenChanged(true);  
         }
-        else std::println("ISSBIG SET ERROR");
+        else std::println(std::cerr,"ERROR:ISSBIG SET ERROR");
     }
 }
 //----------------------------------------------------------------------------
@@ -313,25 +321,22 @@ void    bttParser::extra_date_handler(){
 }
 //----------------------------------------------------------------------------
 void    bttParser::delete_tag_handler(){
-    std::println("Delete Tag Handler");
     std::string tag{};
-
     tag = this->getStrResult(this->getCmdArg(arg_id_t::DELETE_TAG));
-    std::println("Tag to delete : {}",tag);
     this->manager->deleteTag(tag);
     this->setFileHasBeenChanged(true);
 }
 //----------------------------------------------------------------------------
 void    bttParser::update_handler(){
     if (this->count(this->getCmdArg(arg_id_t::NO_SAVE))>0) {
-        std::println("Test mode - File {0:s} won't be written.",this->getFileName());
+        std::println(std::cout,"INFO:Test mode - File {0:s} won't be written.",this->getFileName());
     }
     else if (this->hasFileChanged()){
         if (this->manager->update()){
-            std::println("File succesfully written.");
+            std::println(std::cout,"OK:File succesfully written.");
         } 
         else{
-            std::println("Error while writing the file.");
+            std::println(std::cerr,"ERROR:Error while writing the file.");
         }
     }
 }

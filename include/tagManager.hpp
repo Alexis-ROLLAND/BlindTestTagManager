@@ -91,7 +91,9 @@ class tagManager{
         TagLib::FileRef file{};
         TagLib::PropertyMap tags{};
 
-        
+        bool    tagsHaveChanged{false};
+        void    settagsHaveChanged(bool value) {this->tagsHaveChanged = value;};
+
         /**
          * @brief   Getter for the file attribute, wich is a reference to the mp3 file
          * @return  TagLib::FileRef
@@ -118,6 +120,8 @@ class tagManager{
         [[nodiscard]]   std::size_t getNbTags()  noexcept {return this->tags.size();};
         void    dump()  noexcept;
 
+        [[nodiscard]]   bool gettagsHaveChanged() {return this->tagsHaveChanged;};
+
         [[nodiscard]]   std::string getTitre(bool fc) ;
         [[nodiscard]]   std::string getExtraTitle(bool fc); 
         [[nodiscard]]   std::string getInterprete(bool fc);
@@ -135,16 +139,16 @@ class tagManager{
         void    setTitre(std::string titre);
         void    setExtraTitle(std::string titre);
 
-        [[nodiscard]] bool    isMovieSoundTrack() ;
+        [[nodiscard]] bool    isMovieSoundTrack(bool fc) ;
         void    setMovieSoundTrackFlag(bool isMovieSt);
 
-        [[nodiscard]] bool    isTvShow() ;
+        [[nodiscard]] bool    isTvShow(bool fc) ;
         void    setTvShowFlag(bool isTvs);
 
-        [[nodiscard]] bool    isMasterPiece() ;
+        [[nodiscard]] bool    isMasterPiece(bool fc) ;
         void    setMasterPieceFlag(bool isMstpce);
 
-        [[nodiscard]] bool    isSbig() ;
+        [[nodiscard]] bool    isSbig(bool fc) ;
         void    setSbigFlag(bool isSb);
 
         void    deleteTag(const std::string &tag);

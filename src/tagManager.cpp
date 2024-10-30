@@ -27,7 +27,7 @@ void    tagManager::deleteTag(const std::string &tag){
     if (this->isTagExisting(tag)){
         this->tags.erase(tag);
     }
-
+    this->settagsHaveChanged(true);
 }
 
 std::string tagManager::getTitre(bool fc) {
@@ -128,37 +128,43 @@ void    tagManager::setLangue(tagManager::btLanguage Langue){
     
     if (this->isTagExisting(tagLangue) == false) this->tags.insert(tagLangue,Value);   
     else this->tags.replace(tagLangue,Value);
+
+    this->settagsHaveChanged(true);
 }
 
 void    tagManager::setDate(unsigned int year){
-    //std::println("setDate called");
     TagLib::String Value = std::to_string(year);
     if (this->isTagExisting(tagDate) == false) this->tags.insert(tagDate,Value);   
     else this->tags.replace(tagDate,Value); 
+    this->settagsHaveChanged(true);
 } 
 
 void    tagManager::setExtraDate(unsigned int year){
     TagLib::String Value = std::to_string(year);
     if (this->isTagExisting(tagExtraDate) == false) this->tags.insert(tagExtraDate,Value);   
-    else this->tags.replace(tagExtraDate,Value);    
+    else this->tags.replace(tagExtraDate,Value);  
+    this->settagsHaveChanged(true);  
 }
 
 void    tagManager::setInterprete(std::string artist){
     TagLib::String Value = artist;
     if (this->isTagExisting(tagInterprete) == false) this->tags.insert(tagInterprete,Value);   
     else this->tags.replace(tagInterprete,Value);    
+    this->settagsHaveChanged(true);
 }
 
 void    tagManager::setTitre(std::string titre){
     TagLib::String Value = titre;
     if (this->isTagExisting(tagTitre) == false) this->tags.insert(tagTitre,Value);   
     else this->tags.replace(tagTitre,Value);    
+    this->settagsHaveChanged(true);
 }
 
 void    tagManager::setExtraTitle(std::string titre){
     TagLib::String Value = titre;
     if (this->isTagExisting(tagExtraTitle) == false) this->tags.insert(tagExtraTitle,Value);   
-    else this->tags.replace(tagExtraTitle,Value);       
+    else this->tags.replace(tagExtraTitle,Value);  
+    this->settagsHaveChanged(true);     
 }
 
 uint8_t tagManager::getExtraTagValue(bool CreateEmptyIfNotExist) {
@@ -183,6 +189,7 @@ void    tagManager::setExtraTagValue(uint8_t Byte){
     TagLib::String Value = std::format("{:02X}", Byte);
     if (this->isTagExisting(tagExtra) == false) this->tags.insert(tagExtra,Value);   
     else this->tags.replace(tagExtra,Value);
+    this->settagsHaveChanged(true);
 }
 
 void    tagManager::setMovieSoundTrackFlag(bool isMovieSt){
@@ -253,30 +260,30 @@ void    tagManager::setSbigFlag(bool isSb){
     this->setExtraTagValue(Byte); 
 }
 
-bool    tagManager::isMovieSoundTrack() {
-    uint8_t Byte = this->getExtraTagValue(false);
+bool    tagManager::isMovieSoundTrack(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::MOVIE_STRACK)) == std::to_underlying(btExtraMask::MOVIE_STRACK) ) return true;
     else return false;
 
 }
 
-bool    tagManager::isTvShow() {
-    uint8_t Byte = this->getExtraTagValue(false);
+bool    tagManager::isTvShow(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::TV_SHOW)) == std::to_underlying(btExtraMask::TV_SHOW) ) return true;
     else return false;    
 }
 
-bool    tagManager::isMasterPiece() {
-    uint8_t Byte = this->getExtraTagValue(false);
+bool    tagManager::isMasterPiece(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::MASTERPIECE)) == std::to_underlying(btExtraMask::MASTERPIECE) ) return true;
     else return false;     
 }
 
-bool    tagManager::isSbig() {
-    uint8_t Byte = this->getExtraTagValue(false);
+bool    tagManager::isSbig(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::SBIG)) == std::to_underlying(btExtraMask::SBIG) ) return true;
     else return false;      
@@ -286,7 +293,7 @@ std::string     tagManager::makeFileName() {
     std::string Name{};
     tagManager::btPeriod    Periode;
 
-    if ( (this->isMovieSoundTrack()) || (this->isTvShow())) Periode = this->getExtraPeriod();
+    if ( (this->isMovieSoundTrack(false)) || (this->isTvShow(false))) Periode = this->getExtraPeriod();
     else    Periode = this->getPeriod();
 
     switch (Periode){
@@ -312,7 +319,7 @@ std::string     tagManager::makeFileName() {
     Name += "_";
     Name += this->getTitre(false);
 
-    if ( (this->isMovieSoundTrack()) || (this->isTvShow()) ) {
+    if ( (this->isMovieSoundTrack(false)) || (this->isTvShow(false)) ) {
         Name += "_";
         Name += this->getExtraTitle(false); 
     }
