@@ -103,23 +103,28 @@ void    bttParser::get_period_handler(){
     std::string tmpString{};
     bool error{false};
 
-    switch(this->manager->getPeriod()){
+    switch(this->manager->getPeriod(this->getForceCreate())){
         case tagManager::btPeriod::OLDIES : tmpString="OLDIES";break;
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
         case tagManager::btPeriod::EIGHTIES : tmpString="EIGHTIES";break;
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
         case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
         case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
+        case tagManager::btPeriod::INVALID : tmpString="INVALID";break;
         default : tmpString = "ERROR:PERIOD ERROR";error = true;break;
     }
-    if (!error) std::println(std::cout,"Period=[{}]",tmpString);
+
+    if (!error) {
+        std::println(std::cout,"Period=[{}]",tmpString);
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
     else std::println(std::cerr,"{}",tmpString);
 }
 //----------------------------------------------------------------------------
 void    bttParser::get_extra_period_handler(){
     std::string tmpString{};
     bool error{false};
-    switch(this->manager->getExtraPeriod()){
+    switch(this->manager->getExtraPeriod(this->getForceCreate())){
         case tagManager::btPeriod::OLDIES : tmpString="OLDIES";break;
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
         case tagManager::btPeriod::EIGHTIES : tmpString="EIGHTIES";break;
@@ -128,7 +133,10 @@ void    bttParser::get_extra_period_handler(){
         case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
         default : tmpString = "ERROR:EXTRA PERIOD ERROR";error = true;break;
     }
-    if (!error) std::println(std::cout,"Extra-Period=[{}]",tmpString);
+    if (!error) {
+        std::println(std::cout,"Extra-Period=[{}]",tmpString);
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
     else std::println(std::cerr,"{}",tmpString);
 }
 //----------------------------------------------------------------------------

@@ -92,7 +92,8 @@ unsigned int    tagManager::getExtraDate(bool fc) {
 }
 
 tagManager::btPeriod    tagManager::toPeriod(unsigned int year) const noexcept{
-    if (year < 1970) return btPeriod::OLDIES;
+    if (year == INVALID_DATE_VALUE) return btPeriod::INVALID;
+    else if (year < 1970) return btPeriod::OLDIES;
     else if (year < 1980) return btPeriod::SEVENTIES; 
     else if (year < 1990) return btPeriod::EIGHTIES;
     else if (year < 2000) return btPeriod::NINETIES;
@@ -293,8 +294,8 @@ std::string     tagManager::makeFileName() {
     std::string Name{};
     tagManager::btPeriod    Periode;
 
-    if ( (this->isMovieSoundTrack(false)) || (this->isTvShow(false))) Periode = this->getExtraPeriod();
-    else    Periode = this->getPeriod();
+    if ( (this->isMovieSoundTrack(false)) || (this->isTvShow(false))) Periode = this->getExtraPeriod(false);
+    else    Periode = this->getPeriod(false);
 
     switch (Periode){
         case tagManager::btPeriod::OLDIES : Name += "O"; break;

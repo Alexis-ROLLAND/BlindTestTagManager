@@ -71,7 +71,8 @@ class tagManager{
                                 EIGHTIES,   /**< DATE entre 1980 et 1989*/
                                 NINETIES,   /**< DATE entre 1990 et 1999 */
                                 MILLENIUM,  /**< DATE entre 2000 et 2012 */
-                                NOVELTY     /**< Après 2021 (DATE > 2012) */
+                                NOVELTY,    /**< Après 2021 (DATE > 2012) */
+                                INVALID      /**< Valeur par défaut, tag non initialisé (Date = 9999)) */
         };
 
         enum class btLanguage{  FRA,        /**< FRAnçais */
@@ -126,8 +127,8 @@ class tagManager{
         [[nodiscard]]   std::string getExtraTitle(bool fc); 
         [[nodiscard]]   std::string getInterprete(bool fc);
 
-        [[nodiscard]]   btPeriod        getPeriod()  {return this->toPeriod(this->getDate(false));};
-        [[nodiscard]]   btPeriod        getExtraPeriod()  {return this->toPeriod(this->getExtraDate(false));};
+        [[nodiscard]]   btPeriod        getPeriod(bool fc)  {return this->toPeriod(this->getDate(fc));};
+        [[nodiscard]]   btPeriod        getExtraPeriod(bool fc)  {return this->toPeriod(this->getExtraDate(fc));};
         [[nodiscard]]   unsigned int    getDate(bool fc);
         [[nodiscard]]   unsigned int    getExtraDate(bool fc);
         [[nodiscard]]   btLanguage      getLangue(bool fc);
