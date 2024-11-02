@@ -38,6 +38,7 @@ class bttParser{
             IS_TVSHOW,
             IS_MASTERPIECE,
             IS_SBIG,
+            IS_DUET,
             GET_PERIOD,    
             GET_EXTRA_PERIOD,   
             DELETE_TAG, 
@@ -59,6 +60,7 @@ class bttParser{
             {arg_id_t::IS_TVSHOW,{"istvshow","Gets or Sets the EXTRA_TAG value for the TVSHOW indicator (YES/NO)"}},
             {arg_id_t::IS_MASTERPIECE,{"ismasterpiece","Gets or Sets the EXTRA_TAG value for the MASTERPIECE indicator (YES/NO)"}},
             {arg_id_t::IS_SBIG,{"issbig","Gets or Sets the EXTRA_TAG value for the SBIG indicator (YES/NO)"}},
+            {arg_id_t::IS_DUET,{"isduet","Gets or Sets the EXTRA_TAG value for the DUET indicator (YES/NO)"}},
 
             {arg_id_t::GET_PERIOD,{"get-period","Gets period information (\"OLDIES\", \"SEVENTIES\"...)"}},
             {arg_id_t::GET_EXTRA_PERIOD,{"get-extra-period","Gets extra-period information (\"OLDIES\", \"SEVENTIES\"...)"}},
@@ -108,6 +110,7 @@ class bttParser{
         void    istvshow_handler();
         void    ismasterpiece_handler();
         void    issbig_handler();
+        void    isduet_handler();
         void    date_handler();
         void    extra_date_handler();
         void    update_handler();

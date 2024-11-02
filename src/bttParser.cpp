@@ -26,7 +26,8 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         (this->getCmdArg(arg_id_t::IS_TVSHOW),this->getCmdDesc(arg_id_t::IS_TVSHOW), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_MASTERPIECE),this->getCmdDesc(arg_id_t::IS_MASTERPIECE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_SBIG),this->getCmdDesc(arg_id_t::IS_SBIG), cxxopts::value<std::string>()->implicit_value(""))
-
+        (this->getCmdArg(arg_id_t::IS_DUET),this->getCmdDesc(arg_id_t::IS_DUET), cxxopts::value<std::string>()->implicit_value(""))
+        
         /** arguments with integer values */
         (this->getCmdArg(arg_id_t::DATE),this->getCmdDesc(arg_id_t::DATE), cxxopts::value<int>()->implicit_value("9999"))
         (this->getCmdArg(arg_id_t::EXTRA_DATE),this->getCmdDesc(arg_id_t::EXTRA_DATE), cxxopts::value<int>()->implicit_value("9999"))
@@ -75,6 +76,7 @@ void    bttParser::processArgs(){
     if (this->count(this->getCmdArg(arg_id_t::IS_TVSHOW))) this->istvshow_handler();    /** istvshow management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_MASTERPIECE))) this->ismasterpiece_handler();  /** ismasterpiece management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_SBIG))) this->issbig_handler();    /** issbig management part */
+    if (this->count(this->getCmdArg(arg_id_t::IS_DUET))) this->isduet_handler();    /** isduet management part */
     if (this->count(this->getCmdArg(arg_id_t::DATE))) this->date_handler(); /** Date management part  */
     if (this->count(this->getCmdArg(arg_id_t::EXTRA_DATE))) this->extra_date_handler(); /** Extra-Date management part  */
 
@@ -131,6 +133,7 @@ void    bttParser::get_extra_period_handler(){
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
         case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
         case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
+        case tagManager::btPeriod::INVALID : tmpString="INVALID";break;
         default : tmpString = "ERROR:EXTRA PERIOD ERROR";error = true;break;
     }
     if (!error) {
@@ -300,6 +303,30 @@ void    bttParser::issbig_handler(){
             this->setFileHasBeenChanged(true);  
         }
         else std::println(std::cerr,"ERROR:ISSBIG SET ERROR");
+    }
+}
+//----------------------------------------------------------------------------
+void    bttParser::isduet_handler(){
+    std::string tmpString{};
+
+    if (this->getStrResult(this->getCmdArg(arg_id_t::IS_DUET)) == ""){
+        if (this->manager->isDuet(this->getForceCreate()) == true) std::println(std::cout,"isduet=YES");
+        else std::println(std::cout,"isduet=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
+    else{
+        tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_DUET));
+        if (tmpString == "YES"){
+            this->manager->setDuetFlag(true);
+            std::println(std::cout,"OK:ISDUET flag set to 1");
+            this->setFileHasBeenChanged(true);
+        }
+        else if (tmpString == "NO"){
+            this->manager->setDuetFlag(false);
+            std::println(std::cout,"OK:ISDUET flag set to 0");
+            this->setFileHasBeenChanged(true);  
+        }
+        else std::println(std::cerr,"ERROR:ISDUET SET ERROR");
     }
 }
 //----------------------------------------------------------------------------

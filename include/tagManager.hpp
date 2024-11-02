@@ -19,6 +19,7 @@ const   std::string   tagLangue{"LANGUAGE"};
 const   std::string   tagExtra{"EXTRA"};
 const   std::string   tagExtraTitle{"EXTRA_TITLE"};
 const   std::string   tagExtraDate{"EXTRA_DATE"};
+const   std::string   tagExtraArtist("EXTRA_ARTITS");
 
 const   unsigned int  INVALID_DATE_VALUE{9999}; 
 const   std::string   DEFAULT_STRING_VALUE{"default_string_do_not_use"};      
@@ -83,7 +84,8 @@ class tagManager{
             MOVIE_STRACK = 0x01,
             TV_SHOW = 0x02,
             MASTERPIECE = 0x04,
-            SBIG = 0x08
+            SBIG = 0x08,
+            DUET = 0x10
         };
     private:
     
@@ -126,6 +128,7 @@ class tagManager{
         [[nodiscard]]   std::string getTitre(bool fc) ;
         [[nodiscard]]   std::string getExtraTitle(bool fc); 
         [[nodiscard]]   std::string getInterprete(bool fc);
+        [[nodiscard]]   std::string getExtraArtist(bool fc);
 
         [[nodiscard]]   btPeriod        getPeriod(bool fc)  {return this->toPeriod(this->getDate(fc));};
         [[nodiscard]]   btPeriod        getExtraPeriod(bool fc)  {return this->toPeriod(this->getExtraDate(fc));};
@@ -137,6 +140,7 @@ class tagManager{
         void    setDate(unsigned int year);
         void    setExtraDate(unsigned int year);
         void    setInterprete(std::string artist);
+        void    setExtraArtist(std::string artist);
         void    setTitre(std::string titre);
         void    setExtraTitle(std::string titre);
 
@@ -151,6 +155,9 @@ class tagManager{
 
         [[nodiscard]] bool    isSbig(bool fc) ;
         void    setSbigFlag(bool isSb);
+
+        [[nodiscard]] bool    isDuet(bool fc) ;
+        void    setDuetFlag(bool isSb);
 
         void    deleteTag(const std::string &tag);
 

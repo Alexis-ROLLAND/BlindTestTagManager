@@ -67,6 +67,19 @@ std::string tagManager::getInterprete(bool fc){
     }     
 }
 
+std::string tagManager::getExtraArtist(bool fc){
+    if (this->isTagExisting(tagExtraArtist)) return this->tags.value(tagExtraArtist).toString().to8Bit();
+    
+    if (fc){
+        this->setExtraArtist(DEFAULT_STRING_VALUE);
+        return DEFAULT_STRING_VALUE;
+    }
+    else{
+        throw TagNotInTheFileException(tagExtraArtist);
+    }     
+}
+
+
 unsigned int    tagManager::getDate(bool fc) {
     if (this->isTagExisting(tagDate)) return std::stoi(this->tags.value(tagDate).toString().to8Bit());
     
@@ -151,6 +164,13 @@ void    tagManager::setInterprete(std::string artist){
     TagLib::String Value = artist;
     if (this->isTagExisting(tagInterprete) == false) this->tags.insert(tagInterprete,Value);   
     else this->tags.replace(tagInterprete,Value);    
+    this->settagsHaveChanged(true);
+}
+
+void    tagManager::setExtraArtist(std::string artist){
+    TagLib::String Value = artist;
+    if (this->isTagExisting(tagExtraArtist) == false) this->tags.insert(tagExtraArtist,Value);   
+    else this->tags.replace(tagExtraArtist,Value);    
     this->settagsHaveChanged(true);
 }
 
@@ -261,6 +281,23 @@ void    tagManager::setSbigFlag(bool isSb){
     this->setExtraTagValue(Byte); 
 }
 
+void    tagManager::setDuetFlag(bool isSb){
+    uint8_t Byte;
+    try{
+        Byte = this->getExtraTagValue();
+    }
+    catch (const TagNotInTheFileException &e){
+        Byte = 0x00;
+    }
+
+    uint8_t Mask = std::to_underlying(btExtraMask::DUET);
+
+    if (isSb) Byte |= Mask;    
+    else Byte &= ~Mask;
+
+    this->setExtraTagValue(Byte); 
+}
+
 bool    tagManager::isMovieSoundTrack(bool fc) {
     uint8_t Byte = this->getExtraTagValue(fc);
 
@@ -289,6 +326,14 @@ bool    tagManager::isSbig(bool fc) {
     if ((Byte & std::to_underlying(btExtraMask::SBIG)) == std::to_underlying(btExtraMask::SBIG) ) return true;
     else return false;      
 }
+
+bool    tagManager::isDuet(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
+
+    if ((Byte & std::to_underlying(btExtraMask::DUET)) == std::to_underlying(btExtraMask::DUET) ) return true;
+    else return false;      
+}
+
 
 std::string     tagManager::makeFileName() {
     std::string Name{};
