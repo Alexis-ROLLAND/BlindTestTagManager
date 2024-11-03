@@ -198,3 +198,15 @@ TEST_CASE("makeFileName"){
     }
     
 }
+
+TEST_CASE("Check Tags"){
+    REQUIRE(std::filesystem::exists(validFileName) == true);
+    tagManager  myManager{validFileName};
+
+    myManager.deleteTag("EXTRA");
+
+    uint16_t missing = myManager.checkTags();
+    std::println("Missing mask = {0:04x}",missing);
+
+
+}

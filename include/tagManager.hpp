@@ -87,6 +87,18 @@ class tagManager{
             SBIG = 0x08,
             DUET = 0x10
         };
+
+        enum class btMissignTagMask : uint16_t {
+            TITLE = 0x0001,
+            ARTIST = 0x0002,
+            DATE = 0x0004,
+            LANGUAGE = 0x0008,
+            EXTRA = 0x0010,
+            EXTRA_TITLE = 0x0020,
+            EXTRA_DATE = 0x0040,
+            EXTRA_ARTIST = 0x0080
+        };
+
     private:
     
         const std::string   FileName{};
@@ -115,7 +127,11 @@ class tagManager{
 
         /**
          * @brief   Standard CTOR
-         * @param   
+         * @param   FileName
+         * 
+         * @throw   FileNotFoundException   if file doesn't exist
+         * @throw   FileErrorException      file load error
+         * @throw   NoTagsInFileException   if file doesn't contain any tag
          */
         tagManager(const std::string &FileName);
 
@@ -123,17 +139,24 @@ class tagManager{
         [[nodiscard]]   std::size_t getNbTags()  noexcept {return this->tags.size();};
         void    dump()  noexcept;
 
-        [[nodiscard]]   bool gettagsHaveChanged() {return this->tagsHaveChanged;};
+        [[nodiscard]]   bool gettagsHaveChanged() noexcept {return this->tagsHaveChanged;};
 
+        /**
+         * @brief   These functions return a tag value (string format) : Title, Extra Title, Artist, Extra Artist
+         * @param   bool : if true, the tag wil be created if missing
+         * @throw   TagNotInTheFileException if the requested tag doesn't exist in the file and fc is false
+         */
         [[nodiscard]]   std::string getTitre(bool fc) ;
         [[nodiscard]]   std::string getExtraTitle(bool fc); 
         [[nodiscard]]   std::string getInterprete(bool fc);
         [[nodiscard]]   std::string getExtraArtist(bool fc);
 
-        [[nodiscard]]   btPeriod        getPeriod(bool fc)  {return this->toPeriod(this->getDate(fc));};
-        [[nodiscard]]   btPeriod        getExtraPeriod(bool fc)  {return this->toPeriod(this->getExtraDate(fc));};
         [[nodiscard]]   unsigned int    getDate(bool fc);
         [[nodiscard]]   unsigned int    getExtraDate(bool fc);
+
+        [[nodiscard]]   btPeriod        getPeriod(bool fc)  {return this->toPeriod(this->getDate(fc));};
+        [[nodiscard]]   btPeriod        getExtraPeriod(bool fc)  {return this->toPeriod(this->getExtraDate(fc));};
+        
         [[nodiscard]]   btLanguage      getLangue(bool fc);
 
         void    setLangue(btLanguage Langue);
@@ -160,6 +183,8 @@ class tagManager{
         void    setDuetFlag(bool isSb);
 
         void    deleteTag(const std::string &tag);
+
+        uint16_t    checkTags();
 
         [[nodiscard]]   std::string     makeFileName() ;
 

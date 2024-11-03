@@ -335,6 +335,21 @@ bool    tagManager::isDuet(bool fc) {
 }
 
 
+uint16_t    tagManager::checkTags(){
+    uint16_t res{};
+
+    if (!this->isTagExisting(tagTitre)) res += std::to_underlying(btMissignTagMask::TITLE);
+    if (!this->isTagExisting(tagInterprete)) res += std::to_underlying(btMissignTagMask::ARTIST);
+    if (!this->isTagExisting(tagDate)) res += std::to_underlying(btMissignTagMask::DATE);
+    if (!this->isTagExisting(tagLangue)) res += std::to_underlying(btMissignTagMask::LANGUAGE);
+    if (!this->isTagExisting(tagExtra)) res += std::to_underlying(btMissignTagMask::EXTRA);
+    if (!this->isTagExisting(tagExtraTitle)) res += std::to_underlying(btMissignTagMask::EXTRA_TITLE);
+    if (!this->isTagExisting(tagExtraDate)) res += std::to_underlying(btMissignTagMask::EXTRA_DATE);
+    if (!this->isTagExisting(tagExtraArtist)) res += std::to_underlying(btMissignTagMask::EXTRA_ARTIST);
+
+   return res;
+}
+
 std::string     tagManager::makeFileName() {
     std::string Name{};
     tagManager::btPeriod    Periode;

@@ -36,11 +36,18 @@ add_executable(test_tagManager  src/test_tagManager.cpp
                                 src/tagManager.cpp) 
 target_link_libraries(test_tagManager TagLib::tag)
 
-# main executable : cmake --build . -t bttManager
+# main executable test : cmake --build . -t test_bttManager
 add_executable(test_bttManager  src/test_bttManager.cpp
                                 src/bttParser.cpp
                                 src/tagManager.cpp)
 target_link_libraries(test_bttManager TagLib::tag)
+
+# Simple tg checking app
+add_executable(checkTags  src/checkTags.cpp
+                          src/tagManager.cpp) 
+target_link_libraries(checkTags TagLib::tag)  
+
+
 
 # Very simple app listing the tags & values
 # cmake --build . -t dumpTags
