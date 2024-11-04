@@ -205,7 +205,7 @@ TEST_CASE("Check Tags"){
 
     myManager.deleteTag("EXTRA");
 
-    uint16_t missing = myManager.checkTags();
+    missingtagmask_t missing = myManager.checkTags();
     std::println("Missing mask = {0:04x}",missing);
 
 

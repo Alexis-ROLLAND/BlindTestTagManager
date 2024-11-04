@@ -335,7 +335,7 @@ bool    tagManager::isDuet(bool fc) {
 }
 
 
-uint16_t    tagManager::checkTags(){
+missingtagmask_t    tagManager::checkTags(){
     uint16_t res{};
 
     if (!this->isTagExisting(tagTitre)) res += std::to_underlying(btMissignTagMask::TITLE);
@@ -348,6 +348,19 @@ uint16_t    tagManager::checkTags(){
     if (!this->isTagExisting(tagExtraArtist)) res += std::to_underlying(btMissignTagMask::EXTRA_ARTIST);
 
    return res;
+}
+
+void tagManager::prepareFile(){
+    if (!this->isTagExisting(tagTitre)) this->setTitre(DEFAULT_STRING_VALUE);
+    if (!this->isTagExisting(tagInterprete)) this->setInterprete(DEFAULT_STRING_VALUE);
+    if (!this->isTagExisting(tagDate)) this->setDate(INVALID_DATE_VALUE);
+    if (!this->isTagExisting(tagLangue)) this->setLangue(btLanguage::FRA);
+    if (!this->isTagExisting(tagExtra)) this->setExtraTagValue(0x00);
+    if (!this->isTagExisting(tagExtraTitle)) this->setExtraTitle(DEFAULT_STRING_VALUE);
+    if (!this->isTagExisting(tagExtraDate)) this->setExtraDate(INVALID_DATE_VALUE);
+    if (!this->isTagExisting(tagExtraArtist)) this->setExtraArtist(DEFAULT_STRING_VALUE);   
+    if(this->update())std::println("OK");
+    else std::println("ERRROR");
 }
 
 std::string     tagManager::makeFileName() {

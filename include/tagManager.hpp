@@ -12,6 +12,8 @@
 #include <fileref.h>
 #include <tpropertymap.h>
 
+using   missingtagmask_t = uint16_t;
+
 const   std::string   tagTitre{"TITLE"};
 const   std::string   tagInterprete{"ARTIST"};
 const   std::string   tagDate{"DATE"};
@@ -184,7 +186,8 @@ class tagManager{
 
         void    deleteTag(const std::string &tag);
 
-        uint16_t    checkTags();
+        missingtagmask_t    checkTags();
+        void    prepareFile();
 
         [[nodiscard]]   std::string     makeFileName() ;
 
