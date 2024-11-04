@@ -31,6 +31,7 @@ class bttParser{
             TITLE,
             EXTRA_TITLE,
             ARTIST,
+            EXTRA_ARTIST,
             DATE,
             EXTRA_DATE,
             LANGUAGE,
@@ -53,6 +54,7 @@ class bttParser{
             {arg_id_t::TITLE,{"title","Gets or Sets the TITLE tag (titre)"}},
             {arg_id_t::EXTRA_TITLE,{"extra-title","Gets or Sets the EXTRA_TITLE tag"}},
             {arg_id_t::ARTIST,{"artist","Gets or Sets the ARTIST tag (interprètre)"}},
+            {arg_id_t::EXTRA_ARTIST,{"extra-artist","Gets or Sets the EXTRA-ARTIST tag (second interprètre d'un duo)"}},
             {arg_id_t::DATE,{"date","Gets or Sets the DATE tag"}},
             {arg_id_t::EXTRA_DATE,{"extra-date","Gets or Sets the EXTRA_DATE tag"}},
             {arg_id_t::LANGUAGE,{"language","Gets or Sets the LANGUAGE tag"}},
@@ -105,6 +107,7 @@ class bttParser{
         void    title_handler();
         void    extra_title_handler();
         void    artist_handler();
+        void    extra_artist_handler();
         void    language_handler();
         void    ismovie_handler();
         void    istvshow_handler();

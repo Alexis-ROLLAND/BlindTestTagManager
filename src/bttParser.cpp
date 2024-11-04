@@ -22,6 +22,7 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         (this->getCmdArg(arg_id_t::TITLE),this->getCmdDesc(arg_id_t::TITLE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::EXTRA_TITLE),this->getCmdDesc(arg_id_t::EXTRA_TITLE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::ARTIST),this->getCmdDesc(arg_id_t::ARTIST), cxxopts::value<std::string>()->implicit_value(""))
+        (this->getCmdArg(arg_id_t::EXTRA_ARTIST),this->getCmdDesc(arg_id_t::EXTRA_ARTIST), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_MOVIE),this->getCmdDesc(arg_id_t::IS_MOVIE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_TVSHOW),this->getCmdDesc(arg_id_t::IS_TVSHOW), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_MASTERPIECE),this->getCmdDesc(arg_id_t::IS_MASTERPIECE), cxxopts::value<std::string>()->implicit_value(""))
@@ -71,6 +72,7 @@ void    bttParser::processArgs(){
     if (this->count(this->getCmdArg(arg_id_t::TITLE))) this->title_handler();   /** Title management part */
     if (this->count(this->getCmdArg(arg_id_t::EXTRA_TITLE))) this->extra_title_handler();   /** Extra Title management part */
     if (this->count(this->getCmdArg(arg_id_t::ARTIST))) this->artist_handler(); /** Artist management part */
+    if (this->count(this->getCmdArg(arg_id_t::EXTRA_ARTIST))) this->extra_artist_handler(); /** Artist management part */
     if (this->count(this->getCmdArg(arg_id_t::LANGUAGE))) this->language_handler(); /** Language management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_MOVIE))) this->ismovie_handler();  /** ismovie management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_TVSHOW))) this->istvshow_handler();    /** istvshow management part */
@@ -178,6 +180,18 @@ void    bttParser::artist_handler(){
         this->manager->setInterprete(this->getStrResult(this->getCmdArg(arg_id_t::ARTIST)));
         this->setFileHasBeenChanged(true);
         std::println(std::cout,"OK:Interprète set to [{}]",this->manager->getInterprete(this->getForceCreate()));
+    }
+}
+//----------------------------------------------------------------------------
+void    bttParser::extra_artist_handler(){
+    if (this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_ARTIST)) == ""){
+        std::println(std::cout,"Second Interprete=[{}]",this->manager->getExtraArtist(this->getForceCreate()));
+        if (this->getForceCreate()) this->setFileHasBeenChanged(true);
+    }
+    else{
+        this->manager->setExtraArtist(this->getStrResult(this->getCmdArg(arg_id_t::EXTRA_ARTIST)));
+        this->setFileHasBeenChanged(true);
+        std::println(std::cout,"OK:Second Interprète set to [{}]",this->manager->getExtraArtist(this->getForceCreate()));
     }
 }
 //----------------------------------------------------------------------------

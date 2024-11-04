@@ -21,7 +21,7 @@ const   std::string   tagLangue{"LANGUAGE"};
 const   std::string   tagExtra{"EXTRA"};
 const   std::string   tagExtraTitle{"EXTRA_TITLE"};
 const   std::string   tagExtraDate{"EXTRA_DATE"};
-const   std::string   tagExtraArtist("EXTRA_ARTITS");
+const   std::string   tagExtraArtist("EXTRA_ARTIST");
 
 const   unsigned int  INVALID_DATE_VALUE{9999}; 
 const   std::string   DEFAULT_STRING_VALUE{"default_string_do_not_use"};      
