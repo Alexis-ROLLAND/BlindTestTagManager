@@ -117,9 +117,29 @@ class tagManager{
          */
         [[nodiscard]]   TagLib::FileRef getFile() const noexcept {return this->file;};
 
+        /**
+         * @brief   Check for the tag's existence.
+         * @return  true if the tag exists in the file, false otherwise.
+         */
+
         [[nodiscard]]   bool isTagExisting(const std::string &Tag) noexcept;
 
+        /**
+         *  @brief  getter for the Extra tag value
+         *  @param  bool : if this param is true, the tag (if nonexistent) will be
+         *                  created (with a default, identificable) value)
+         * @return  uint8_t : Tag's value 
+         *    
+         * @throw   TagNotInTheFileException
+         * @throw   BadTagValueException
+         */
         [[nodiscard]]   uint8_t getExtraTagValue(bool CreateEmptyIfNotExist = false);
+        
+        /** 
+         * @brief   setter for the Extra tag value
+         * @param   uint8_t : tag value
+         *  
+         */
         void    setExtraTagValue(uint8_t Byte);                    
 
         [[nodiscard]]   btPeriod    toPeriod(unsigned int year) const noexcept;
