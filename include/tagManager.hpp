@@ -138,18 +138,23 @@ class tagManager{
         /** 
          * @brief   setter for the Extra tag value
          * @param   uint8_t : tag value
-         *  
          */
         void    setExtraTagValue(uint8_t Byte);                    
 
+        /**
+         * @brief : converts a year to a period
+         * @param unsigned int : the releasing date (year) of the record
+         * @return btPeriod, the Blind Test Period
+         */
         [[nodiscard]]   btPeriod    toPeriod(unsigned int year) const noexcept;
+
     public:
         tagManager() = delete;          /** Default CTOR is deleted */
         virtual ~tagManager()=default;  /** DTOR is defaulted */
 
         /**
          * @brief   Standard CTOR
-         * @param   FileName
+         * @param   std::string FileName
          * 
          * @throw   FileNotFoundException   if file doesn't exist
          * @throw   FileErrorException      file load error
@@ -157,10 +162,26 @@ class tagManager{
          */
         tagManager(const std::string &FileName);
 
+        /**
+         * @brief returns the filename 
+         */
         [[nodiscard]]   std::string getFileName()  noexcept {return this->FileName;};
+
+        /**
+         * @brief returns the number of identified tags in the file 
+         */
         [[nodiscard]]   std::size_t getNbTags()  noexcept {return this->tags.size();};
+
+        /**
+         * @brief "Dumps" the tags and values to std::cout. 
+         *          formar : TAG = Value  
+         */
         void    dump()  noexcept;
 
+        /**
+         * @brief Returns the "status" of the file
+         * @return bool : returns true if the tags have changed (number, values...)
+         */
         [[nodiscard]]   bool gettagsHaveChanged() noexcept {return this->tagsHaveChanged;};
 
         /**
@@ -173,9 +194,19 @@ class tagManager{
         [[nodiscard]]   std::string getInterprete(bool fc);
         [[nodiscard]]   std::string getExtraArtist(bool fc);
 
+        /**
+         * @brief   These functions return a tag value (integer format) : Date, Extra Date
+         * @param   bool : if true, the tag wil be created if missing
+         * @throw   TagNotInTheFileException if the requested tag doesn't exist in the file and fc is false
+         */
         [[nodiscard]]   unsigned int    getDate(bool fc);
         [[nodiscard]]   unsigned int    getExtraDate(bool fc);
 
+        /**
+         * @brief   These functions return a direct (getLangue) or interpreted tag value (Period, Extra Period). 
+         * @param   bool : if true, the tag wil be created if missing
+         * @throw   TagNotInTheFileException if the requested tag doesn't exist in the file and fc is false
+         */
         [[nodiscard]]   btPeriod        getPeriod(bool fc)  {return this->toPeriod(this->getDate(fc));};
         [[nodiscard]]   btPeriod        getExtraPeriod(bool fc)  {return this->toPeriod(this->getExtraDate(fc));};
         
