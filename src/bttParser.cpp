@@ -23,6 +23,7 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         (this->getCmdArg(arg_id_t::EXTRA_TITLE),this->getCmdDesc(arg_id_t::EXTRA_TITLE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::ARTIST),this->getCmdDesc(arg_id_t::ARTIST), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::EXTRA_ARTIST),this->getCmdDesc(arg_id_t::EXTRA_ARTIST), cxxopts::value<std::string>()->implicit_value(""))
+        (this->getCmdArg(arg_id_t::LANGUAGE),this->getCmdDesc(arg_id_t::LANGUAGE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_MOVIE),this->getCmdDesc(arg_id_t::IS_MOVIE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_TVSHOW),this->getCmdDesc(arg_id_t::IS_TVSHOW), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_MASTERPIECE),this->getCmdDesc(arg_id_t::IS_MASTERPIECE), cxxopts::value<std::string>()->implicit_value(""))
