@@ -19,10 +19,13 @@ int main(int argc, char* argv[]){
 
     for (const auto& arg : tabFiles ) {
         
-        std::println("File {} - ",arg);
+        std::println("File {}",arg);
         tagManager  myManager(arg);
-        myManager.prepareFile();
-        
+        std::println("Initial tags : ");
+        myManager.dump();
+        myManager.prepareFile(true);
+        std::println("Actual tags : ");
+        myManager.dump();
     }
 
 

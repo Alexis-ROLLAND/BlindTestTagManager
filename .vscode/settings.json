@@ -54,7 +54,14 @@
         "span": "cpp",
         "streambuf": "cpp",
         "variant": "cpp",
-        "print": "cpp"
+        "print": "cpp",
+        "codecvt": "cpp",
+        "cstdarg": "cpp",
+        "cstdio": "cpp",
+        "ratio": "cpp",
+        "iomanip": "cpp",
+        "numbers": "cpp",
+        "cinttypes": "cpp"
     },
     
 }

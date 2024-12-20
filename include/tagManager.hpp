@@ -6,6 +6,7 @@
 #include <exception>
 #include <filesystem>
 #include <print>
+#include <set>
 
 /** inclusions for TagLib  */
 #include <tag.h>
@@ -22,6 +23,16 @@ const   std::string   tagExtra{"EXTRA"};
 const   std::string   tagExtraTitle{"EXTRA_TITLE"};
 const   std::string   tagExtraDate{"EXTRA_DATE"};
 const   std::string   tagExtraArtist("EXTRA_ARTIST");
+
+const   std::set<std::string>    bttTagList{tagTitre,
+                                            tagInterprete,
+                                            tagDate,
+                                            tagLangue,
+                                            tagExtra,
+                                            tagExtraTitle,
+                                            tagExtraDate,
+                                            tagExtraArtist
+                                        };
 
 const   unsigned int  INVALID_DATE_VALUE{9999}; 
 const   std::string   DEFAULT_STRING_VALUE{"default_string_do_not_use"};      
@@ -90,7 +101,7 @@ class tagManager{
             DUET = 0x10
         };
 
-        enum class btMissignTagMask : uint16_t {
+        enum class btMissingTagMask : uint16_t {
             TITLE = 0x0001,
             ARTIST = 0x0002,
             DATE = 0x0004,
@@ -121,7 +132,6 @@ class tagManager{
          * @brief   Check for the tag's existence.
          * @return  true if the tag exists in the file, false otherwise.
          */
-
         [[nodiscard]]   bool isTagExisting(const std::string &Tag) noexcept;
 
         /**
@@ -148,6 +158,9 @@ class tagManager{
          */
         [[nodiscard]]   btPeriod    toPeriod(unsigned int year) const noexcept;
 
+
+        [[nodiscard]]   bool    isbtTag(const std::string &tagname){return bttTagList.contains(tagname);};
+        [[nodiscard]]   bool    ContainsNonBtTags();  
     public:
         tagManager() = delete;          /** Default CTOR is deleted */
         virtual ~tagManager()=default;  /** DTOR is defaulted */
@@ -174,7 +187,8 @@ class tagManager{
 
         /**
          * @brief "Dumps" the tags and values to std::cout. 
-         *          formar : TAG = Value  
+         *          format : TAG = Value [BTtag]
+         *          [BTtag] is added at the end of the line if the tag is used by bttManager 
          */
         void    dump()  noexcept;
 
@@ -238,7 +252,7 @@ class tagManager{
         void    deleteTag(const std::string &tag);
 
         missingtagmask_t    checkTags();
-        void    prepareFile();
+        void    prepareFile(bool eraseUnusedTags = false);
 
         [[nodiscard]]   std::string     makeFileName() ;
 

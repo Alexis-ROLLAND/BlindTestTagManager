@@ -12,9 +12,14 @@ tagManager::tagManager(const std::string &FileName):FileName{FileName}{
     if (this->tags.isEmpty()) throw NoTagsInFileException{};
 }
 
+
+
 void    tagManager::dump() noexcept{
+    std::string status{};
     for(auto tag : this->tags){
-        std::println("{} = {}",tag.first.to8Bit(),tag.second.toString().to8Bit());
+        if (this->isbtTag(tag.first.to8Bit())==true) status = "[BTtag]";
+        else status="";
+        std::println("{} = {} {}",tag.first.to8Bit(),tag.second.toString().to8Bit(),status);
     }
 }
 
@@ -338,19 +343,47 @@ bool    tagManager::isDuet(bool fc) {
 missingtagmask_t    tagManager::checkTags(){
     uint16_t res{};
 
-    if (!this->isTagExisting(tagTitre)) res += std::to_underlying(btMissignTagMask::TITLE);
-    if (!this->isTagExisting(tagInterprete)) res += std::to_underlying(btMissignTagMask::ARTIST);
-    if (!this->isTagExisting(tagDate)) res += std::to_underlying(btMissignTagMask::DATE);
-    if (!this->isTagExisting(tagLangue)) res += std::to_underlying(btMissignTagMask::LANGUAGE);
-    if (!this->isTagExisting(tagExtra)) res += std::to_underlying(btMissignTagMask::EXTRA);
-    if (!this->isTagExisting(tagExtraTitle)) res += std::to_underlying(btMissignTagMask::EXTRA_TITLE);
-    if (!this->isTagExisting(tagExtraDate)) res += std::to_underlying(btMissignTagMask::EXTRA_DATE);
-    if (!this->isTagExisting(tagExtraArtist)) res += std::to_underlying(btMissignTagMask::EXTRA_ARTIST);
+    if (!this->isTagExisting(tagTitre)) res += std::to_underlying(btMissingTagMask::TITLE);
+    if (!this->isTagExisting(tagInterprete)) res += std::to_underlying(btMissingTagMask::ARTIST);
+    if (!this->isTagExisting(tagDate)) res += std::to_underlying(btMissingTagMask::DATE);
+    if (!this->isTagExisting(tagLangue)) res += std::to_underlying(btMissingTagMask::LANGUAGE);
+    if (!this->isTagExisting(tagExtra)) res += std::to_underlying(btMissingTagMask::EXTRA);
+    if (!this->isTagExisting(tagExtraTitle)) res += std::to_underlying(btMissingTagMask::EXTRA_TITLE);
+    if (!this->isTagExisting(tagExtraDate)) res += std::to_underlying(btMissingTagMask::EXTRA_DATE);
+    if (!this->isTagExisting(tagExtraArtist)) res += std::to_underlying(btMissingTagMask::EXTRA_ARTIST);
 
    return res;
 }
 
-void tagManager::prepareFile(){
+bool tagManager::ContainsNonBtTags(){
+    auto it = this->tags.begin();
+
+    while(it != this->tags.end()){
+        std::string curTag = it->first.to8Bit();
+        //std::println("Checking tag {}",curTag);
+        if (this->isbtTag(it->first.to8Bit())==false) return true;
+        else ++it;
+    }
+
+    return false;
+}
+
+void tagManager::prepareFile(bool eraseUnusedTags){
+    if (eraseUnusedTags == true){
+        
+        while (this->ContainsNonBtTags()){
+            auto it = this->tags.begin();
+            
+            while(this->isbtTag(it->first.to8Bit())==true){
+                ++it;
+            }
+            this->deleteTag(it->first.to8Bit());
+
+        }
+        
+    }
+    
+
     if (!this->isTagExisting(tagTitre)) this->setTitre(DEFAULT_STRING_VALUE);
     if (!this->isTagExisting(tagInterprete)) this->setInterprete(DEFAULT_STRING_VALUE);
     if (!this->isTagExisting(tagDate)) this->setDate(INVALID_DATE_VALUE);
