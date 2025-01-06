@@ -113,8 +113,9 @@ void    bttParser::get_period_handler(){
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
         case tagManager::btPeriod::EIGHTIES : tmpString="EIGHTIES";break;
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
-        case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
-        case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
+        case tagManager::btPeriod::Y2K0X : tmpString="Y2K0X";break;
+        case tagManager::btPeriod::Y2K1X : tmpString="Y2K1X";break;
+        case tagManager::btPeriod::Y2K2X : tmpString="Y2K2X";break;
         case tagManager::btPeriod::INVALID : tmpString="INVALID";break;
         default : tmpString = "ERROR:PERIOD ERROR";error = true;break;
     }
@@ -134,8 +135,9 @@ void    bttParser::get_extra_period_handler(){
         case tagManager::btPeriod::SEVENTIES : tmpString="SEVENTIES";break;
         case tagManager::btPeriod::EIGHTIES : tmpString="EIGHTIES";break;
         case tagManager::btPeriod::NINETIES : tmpString="NINETIES";break;
-        case tagManager::btPeriod::MILLENIUM : tmpString="MILLENIUM";break;
-        case tagManager::btPeriod::NOVELTY : tmpString="NOVELTY";break;
+        case tagManager::btPeriod::Y2K0X : tmpString="Y2K0X";break;
+        case tagManager::btPeriod::Y2K1X : tmpString="Y2K1X";break;
+        case tagManager::btPeriod::Y2K2X : tmpString="Y2K2X";break;
         case tagManager::btPeriod::INVALID : tmpString="INVALID";break;
         default : tmpString = "ERROR:EXTRA PERIOD ERROR";error = true;break;
     }

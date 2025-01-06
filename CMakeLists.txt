@@ -36,7 +36,7 @@ add_executable(test_tagManager  src/test_tagManager.cpp
                                 src/tagManager.cpp) 
 target_link_libraries(test_tagManager TagLib::tag)
 
-# main executable test : cmake --build . -t test_bttManager
+# main executable test : cmake --build . -t test_bttManager     /!\ Not Working /!\ -> Link error
 add_executable(test_bttManager  src/test_bttManager.cpp
                                 src/bttParser.cpp
                                 src/tagManager.cpp)

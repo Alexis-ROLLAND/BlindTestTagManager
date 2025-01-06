@@ -115,8 +115,9 @@ tagManager::btPeriod    tagManager::toPeriod(unsigned int year) const noexcept{
     else if (year < 1980) return btPeriod::SEVENTIES; 
     else if (year < 1990) return btPeriod::EIGHTIES;
     else if (year < 2000) return btPeriod::NINETIES;
-    else if (year < 2013) return btPeriod::MILLENIUM;
-    else return btPeriod::NOVELTY;
+    else if (year < 2010) return btPeriod::Y2K0X;
+    else if (year < 2020) return btPeriod::Y2K1X;
+    else return btPeriod::Y2K2X;
 }
 
 tagManager::btLanguage      tagManager::getLangue(bool fc){
@@ -404,12 +405,13 @@ std::string     tagManager::makeFileName() {
     else    Periode = this->getPeriod(false);
 
     switch (Periode){
-        case tagManager::btPeriod::OLDIES : Name += "O"; break;
+        case tagManager::btPeriod::OLDIES : Name += "o"; break;
         case tagManager::btPeriod::SEVENTIES : Name += "7"; break;
         case tagManager::btPeriod::EIGHTIES : Name += "8"; break;
         case tagManager::btPeriod::NINETIES : Name += "9"; break;
-        case tagManager::btPeriod::MILLENIUM : Name += "M"; break;
-        case tagManager::btPeriod::NOVELTY : Name += "N"; break;
+        case tagManager::btPeriod::Y2K0X : Name += "0";break;
+        case tagManager::btPeriod::Y2K1X : Name += "1";break;
+        case tagManager::btPeriod::Y2K2X : Name += "2";break;
         default: Name += "x";break;
     }
   

@@ -84,8 +84,9 @@ class tagManager{
                                 SEVENTIES,  /**< DATE entre 1970 et 1979 */
                                 EIGHTIES,   /**< DATE entre 1980 et 1989*/
                                 NINETIES,   /**< DATE entre 1990 et 1999 */
-                                MILLENIUM,  /**< DATE entre 2000 et 2012 */
-                                NOVELTY,    /**< Après 2021 (DATE > 2012) */
+                                Y2K0X,      /**< DATE entre 2000 et 2009 */
+                                Y2K1X,      /**< DATE entre 2010 et 2019 */
+                                Y2K2X,      /**< DATE entre 2020 et 2029 */ 
                                 INVALID      /**< Valeur par défaut, tag non initialisé (Date = 9999)) */
         };
 
