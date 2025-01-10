@@ -228,7 +228,7 @@ void    tagManager::setMovieSoundTrackFlag(bool isMovieSt){
         Byte = 0x00;
     }
 
-    uint8_t Mask = std::to_underlying(btExtraMask::MOVIE_STRACK);
+    uint8_t Mask = std::to_underlying(btExtraMask::MOVIE_TRACK);
 
     if (isMovieSt) Byte |= Mask;    /** Sets the "Movie Soundtrack" flag  */
     else Byte &= ~Mask;
@@ -304,10 +304,28 @@ void    tagManager::setDuetFlag(bool isSb){
     this->setExtraTagValue(Byte); 
 }
 
+void    tagManager::setCoverFlag(bool isSb){
+    uint8_t Byte;
+    try{
+        Byte = this->getExtraTagValue();
+    }
+    catch (const TagNotInTheFileException &e){
+        Byte = 0x00;
+    }
+
+    uint8_t Mask = std::to_underlying(btExtraMask::COVER);
+
+    if (isSb) Byte |= Mask;    
+    else Byte &= ~Mask;
+
+    this->setExtraTagValue(Byte); 
+}
+
+
 bool    tagManager::isMovieSoundTrack(bool fc) {
     uint8_t Byte = this->getExtraTagValue(fc);
 
-    if ((Byte & std::to_underlying(btExtraMask::MOVIE_STRACK)) == std::to_underlying(btExtraMask::MOVIE_STRACK) ) return true;
+    if ((Byte & std::to_underlying(btExtraMask::MOVIE_TRACK)) == std::to_underlying(btExtraMask::MOVIE_TRACK) ) return true;
     else return false;
 
 }
@@ -337,6 +355,13 @@ bool    tagManager::isDuet(bool fc) {
     uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::DUET)) == std::to_underlying(btExtraMask::DUET) ) return true;
+    else return false;      
+}
+
+bool    tagManager::isCover(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
+
+    if ((Byte & std::to_underlying(btExtraMask::COVER)) == std::to_underlying(btExtraMask::COVER) ) return true;
     else return false;      
 }
 

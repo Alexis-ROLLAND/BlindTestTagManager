@@ -95,11 +95,12 @@ class tagManager{
         };
 
         enum class btExtraMask : uint8_t {    
-            MOVIE_STRACK = 0x01,
-            TV_SHOW = 0x02,
-            MASTERPIECE = 0x04,
-            SBIG = 0x08,
-            DUET = 0x10
+            MOVIE_TRACK = 0x01,         /** Title is also a movie track  */
+            TV_SHOW = 0x02,             /** Title is also a TV Show music */
+            MASTERPIECE = 0x04,         /** Title is known as a masterpiece */
+            SBIG = 0x08,                /** Title is known as a very bad song */
+            DUET = 0x10,                /** This title is a duet        */
+            COVER = 0x20                /** This title is a cover   */
         };
 
         enum class btMissingTagMask : uint16_t {
@@ -249,6 +250,10 @@ class tagManager{
 
         [[nodiscard]] bool    isDuet(bool fc) ;
         void    setDuetFlag(bool isSb);
+
+        [[nodiscard]] bool    isCover(bool fc) ;
+        void    setCoverFlag(bool isSb);
+
 
         void    deleteTag(const std::string &tag);
 

@@ -29,6 +29,7 @@ bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
         (this->getCmdArg(arg_id_t::IS_MASTERPIECE),this->getCmdDesc(arg_id_t::IS_MASTERPIECE), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_SBIG),this->getCmdDesc(arg_id_t::IS_SBIG), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_DUET),this->getCmdDesc(arg_id_t::IS_DUET), cxxopts::value<std::string>()->implicit_value(""))
+        (this->getCmdArg(arg_id_t::IS_COVER),this->getCmdDesc(arg_id_t::IS_COVER), cxxopts::value<std::string>()->implicit_value(""))
         
         /** arguments with integer values */
         (this->getCmdArg(arg_id_t::DATE),this->getCmdDesc(arg_id_t::DATE), cxxopts::value<int>()->implicit_value("9999"))
@@ -80,6 +81,7 @@ void    bttParser::processArgs(){
     if (this->count(this->getCmdArg(arg_id_t::IS_MASTERPIECE))) this->ismasterpiece_handler();  /** ismasterpiece management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_SBIG))) this->issbig_handler();    /** issbig management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_DUET))) this->isduet_handler();    /** isduet management part */
+    if (this->count(this->getCmdArg(arg_id_t::IS_COVER))) this->iscover_handler();    /** iscover management part */
     if (this->count(this->getCmdArg(arg_id_t::DATE))) this->date_handler(); /** Date management part  */
     if (this->count(this->getCmdArg(arg_id_t::EXTRA_DATE))) this->extra_date_handler(); /** Extra-Date management part  */
 
@@ -344,6 +346,30 @@ void    bttParser::isduet_handler(){
             this->setFileHasBeenChanged(true);  
         }
         else std::println(std::cerr,"ERROR:ISDUET SET ERROR");
+    }
+}
+//----------------------------------------------------------------------------
+void    bttParser::iscover_handler(){
+    std::string tmpString{};
+
+    if (this->getStrResult(this->getCmdArg(arg_id_t::IS_COVER)) == ""){
+        if (this->manager->isCover(this->getForceCreate()) == true) std::println(std::cout,"iscover=YES");
+        else std::println(std::cout,"iscover=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
+    else{
+        tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_COVER));
+        if (tmpString == "YES"){
+            this->manager->setCoverFlag(true);
+            std::println(std::cout,"OK:ISCOVER flag set to 1");
+            this->setFileHasBeenChanged(true);
+        }
+        else if (tmpString == "NO"){
+            this->manager->setCoverFlag(false);
+            std::println(std::cout,"OK:ISCOVER flag set to 0");
+            this->setFileHasBeenChanged(true);  
+        }
+        else std::println(std::cerr,"ERROR:ISCOVER SET ERROR");
     }
 }
 //----------------------------------------------------------------------------
