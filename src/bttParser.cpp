@@ -4,7 +4,7 @@
 
 
 //----------------------------------------------------------------------------
-bttParser::bttParser(int argc, char *argv[]):argc{argc},argv{argv}{
+bttParser::bttParser(int _argc, char *_argv[]):argc{_argc},argv{_argv}{
 
     cxxopts::value<std::string>()->default_value("");
 

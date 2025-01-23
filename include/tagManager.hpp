@@ -68,7 +68,7 @@ class UnknownTagException : public tagManagerException{
 class TagNotInTheFileException : public tagManagerException{
     public:
         const std::string tag{}; 
-        TagNotInTheFileException(const std::string tag) : tagManagerException("Tag provided is not in the file metadata."),tag{tag}{};
+        TagNotInTheFileException(const std::string _tag) : tagManagerException("Tag provided is not in the file metadata."),tag{_tag}{};
 };
 
 class BadTagValueException : public tagManagerException{

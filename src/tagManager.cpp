@@ -1,6 +1,6 @@
 #include "tagManager.hpp"
 
-tagManager::tagManager(const std::string &FileName):FileName{FileName}{
+tagManager::tagManager(const std::string &_FileName):FileName{_FileName}{
     if (std::filesystem::exists(this->getFileName()) == false) throw FileNotFoundException{};
     
     this->file = TagLib::FileRef(this->getFileName().c_str(),false);
