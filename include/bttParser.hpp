@@ -41,6 +41,8 @@ class bttParser{
             IS_SBIG,
             IS_DUET,
             IS_COVER,
+            IS_NAME,
+            IS_CITY,
             GET_PERIOD,    
             GET_EXTRA_PERIOD,   
             DELETE_TAG, 
@@ -65,6 +67,8 @@ class bttParser{
             {arg_id_t::IS_SBIG,{"issbig","Gets or Sets the EXTRA_TAG value for the SBIG indicator (YES/NO)"}},
             {arg_id_t::IS_DUET,{"isduet","Gets or Sets the EXTRA_TAG value for the DUET indicator (YES/NO)"}},
             {arg_id_t::IS_COVER,{"iscover","Gets or Sets the EXTRA_TAG value for the COVER indicator (YES/NO)"}},
+            {arg_id_t::IS_NAME,{"isname","Gets or Sets the EXTRA_TAG value for the NAME indicator (YES/NO)"}},
+            {arg_id_t::IS_CITY,{"iscity","Gets or Sets the EXTRA_TAG value for the CITY indicator (YES/NO)"}},
 
             {arg_id_t::GET_PERIOD,{"get-period","Gets period information (\"OLDIES\", \"SEVENTIES\"...)"}},
             {arg_id_t::GET_EXTRA_PERIOD,{"get-extra-period","Gets extra-period information (\"OLDIES\", \"SEVENTIES\"...)"}},
@@ -117,6 +121,8 @@ class bttParser{
         void    issbig_handler();
         void    isduet_handler();
         void    iscover_handler();
+        void    isname_handler();
+        void    iscity_handler();
         void    date_handler();
         void    extra_date_handler();
         void    update_handler();

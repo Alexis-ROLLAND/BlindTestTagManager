@@ -95,12 +95,14 @@ class tagManager{
         };
 
         enum class btExtraMask : uint8_t {    
-            MOVIE_TRACK = 0x01,         /** Title is also a movie track  */
-            TV_SHOW = 0x02,             /** Title is also a TV Show music */
-            MASTERPIECE = 0x04,         /** Title is known as a masterpiece */
-            SBIG = 0x08,                /** Title is known as a very bad song */
-            DUET = 0x10,                /** This title is a duet        */
-            COVER = 0x20                /** This title is a cover   */
+            MOVIE_TRACK = 0x01,         /**< Title is also a movie track  */
+            TV_SHOW = 0x02,             /**< Title is also a TV Show music */
+            MASTERPIECE = 0x04,         /**< Title is known as a masterpiece */
+            SBIG = 0x08,                /**< Title is known as a very bad song */
+            DUET = 0x10,                /**< This title is a duet        */
+            COVER = 0x20,               /**< This title is a cover   */
+            NAME = 0x40,                /**< This title can be used for the "Name" game     */
+            CITY = 0x80                 /**< This title can be used for the "Cities" game   */
         };
 
         enum class btMissingTagMask : uint16_t {
@@ -253,6 +255,12 @@ class tagManager{
 
         [[nodiscard]] bool    isCover(bool fc) ;
         void    setCoverFlag(bool isSb);
+
+        [[nodiscard]] bool    isName(bool fc) ;
+        void    setNameFlag(bool isSb);
+
+        [[nodiscard]] bool    isCity(bool fc) ;
+        void    setCityFlag(bool isSb);
 
 
         void    deleteTag(const std::string &tag);

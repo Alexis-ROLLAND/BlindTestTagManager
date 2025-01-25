@@ -30,7 +30,9 @@ bttParser::bttParser(int _argc, char *_argv[]):argc{_argc},argv{_argv}{
         (this->getCmdArg(arg_id_t::IS_SBIG),this->getCmdDesc(arg_id_t::IS_SBIG), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_DUET),this->getCmdDesc(arg_id_t::IS_DUET), cxxopts::value<std::string>()->implicit_value(""))
         (this->getCmdArg(arg_id_t::IS_COVER),this->getCmdDesc(arg_id_t::IS_COVER), cxxopts::value<std::string>()->implicit_value(""))
-        
+        (this->getCmdArg(arg_id_t::IS_NAME),this->getCmdDesc(arg_id_t::IS_NAME), cxxopts::value<std::string>()->implicit_value(""))
+        (this->getCmdArg(arg_id_t::IS_CITY),this->getCmdDesc(arg_id_t::IS_CITY), cxxopts::value<std::string>()->implicit_value(""))
+
         /** arguments with integer values */
         (this->getCmdArg(arg_id_t::DATE),this->getCmdDesc(arg_id_t::DATE), cxxopts::value<int>()->implicit_value("9999"))
         (this->getCmdArg(arg_id_t::EXTRA_DATE),this->getCmdDesc(arg_id_t::EXTRA_DATE), cxxopts::value<int>()->implicit_value("9999"))
@@ -82,6 +84,8 @@ void    bttParser::processArgs(){
     if (this->count(this->getCmdArg(arg_id_t::IS_SBIG))) this->issbig_handler();    /** issbig management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_DUET))) this->isduet_handler();    /** isduet management part */
     if (this->count(this->getCmdArg(arg_id_t::IS_COVER))) this->iscover_handler();    /** iscover management part */
+    if (this->count(this->getCmdArg(arg_id_t::IS_NAME))) this->isname_handler();    /** isname management part */
+    if (this->count(this->getCmdArg(arg_id_t::IS_CITY))) this->iscity_handler();    /** iscity management part */
     if (this->count(this->getCmdArg(arg_id_t::DATE))) this->date_handler(); /** Date management part  */
     if (this->count(this->getCmdArg(arg_id_t::EXTRA_DATE))) this->extra_date_handler(); /** Extra-Date management part  */
 
@@ -370,6 +374,54 @@ void    bttParser::iscover_handler(){
             this->setFileHasBeenChanged(true);  
         }
         else std::println(std::cerr,"ERROR:ISCOVER SET ERROR");
+    }
+}
+//----------------------------------------------------------------------------
+void    bttParser::isname_handler(){
+    std::string tmpString{};
+
+    if (this->getStrResult(this->getCmdArg(arg_id_t::IS_NAME)) == ""){
+        if (this->manager->isName(this->getForceCreate()) == true) std::println(std::cout,"isname=YES");
+        else std::println(std::cout,"isname=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
+    else{
+        tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_NAME));
+        if (tmpString == "YES"){
+            this->manager->setNameFlag(true);
+            std::println(std::cout,"OK:ISNAME flag set to 1");
+            this->setFileHasBeenChanged(true);
+        }
+        else if (tmpString == "NO"){
+            this->manager->setNameFlag(false);
+            std::println(std::cout,"OK:ISNAME flag set to 0");
+            this->setFileHasBeenChanged(true);  
+        }
+        else std::println(std::cerr,"ERROR:ISNAME SET ERROR");
+    }
+}
+//----------------------------------------------------------------------------
+void    bttParser::iscity_handler(){
+    std::string tmpString{};
+
+    if (this->getStrResult(this->getCmdArg(arg_id_t::IS_CITY)) == ""){
+        if (this->manager->isCity(this->getForceCreate()) == true) std::println(std::cout,"iscity=YES");
+        else std::println(std::cout,"iscity=NO");
+        this->setFileHasBeenChanged(this->manager->gettagsHaveChanged());
+    }
+    else{
+        tmpString = this->getStrResult(this->getCmdArg(arg_id_t::IS_CITY));
+        if (tmpString == "YES"){
+            this->manager->setCityFlag(true);
+            std::println(std::cout,"OK:ISCITY flag set to 1");
+            this->setFileHasBeenChanged(true);
+        }
+        else if (tmpString == "NO"){
+            this->manager->setCityFlag(false);
+            std::println(std::cout,"OK:ISCITY flag set to 0");
+            this->setFileHasBeenChanged(true);  
+        }
+        else std::println(std::cerr,"ERROR:ISCITY SET ERROR");
     }
 }
 //----------------------------------------------------------------------------

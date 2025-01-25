@@ -321,6 +321,39 @@ void    tagManager::setCoverFlag(bool isSb){
     this->setExtraTagValue(Byte); 
 }
 
+void    tagManager::setNameFlag(bool isSb){
+    uint8_t Byte;
+    try{
+        Byte = this->getExtraTagValue();
+    }
+    catch (const TagNotInTheFileException &e){
+        Byte = 0x00;
+    }
+
+    uint8_t Mask = std::to_underlying(btExtraMask::NAME);
+
+    if (isSb) Byte |= Mask;    
+    else Byte &= ~Mask;
+
+    this->setExtraTagValue(Byte); 
+}
+
+void    tagManager::setCityFlag(bool isSb){
+    uint8_t Byte;
+    try{
+        Byte = this->getExtraTagValue();
+    }
+    catch (const TagNotInTheFileException &e){
+        Byte = 0x00;
+    }
+
+    uint8_t Mask = std::to_underlying(btExtraMask::CITY);
+
+    if (isSb) Byte |= Mask;    
+    else Byte &= ~Mask;
+
+    this->setExtraTagValue(Byte); 
+}
 
 bool    tagManager::isMovieSoundTrack(bool fc) {
     uint8_t Byte = this->getExtraTagValue(fc);
@@ -362,6 +395,20 @@ bool    tagManager::isCover(bool fc) {
     uint8_t Byte = this->getExtraTagValue(fc);
 
     if ((Byte & std::to_underlying(btExtraMask::COVER)) == std::to_underlying(btExtraMask::COVER) ) return true;
+    else return false;      
+}
+
+bool    tagManager::isName(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
+
+    if ((Byte & std::to_underlying(btExtraMask::NAME)) == std::to_underlying(btExtraMask::NAME) ) return true;
+    else return false;      
+}
+
+bool    tagManager::isCity(bool fc) {
+    uint8_t Byte = this->getExtraTagValue(fc);
+
+    if ((Byte & std::to_underlying(btExtraMask::CITY)) == std::to_underlying(btExtraMask::CITY) ) return true;
     else return false;      
 }
 
