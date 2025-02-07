@@ -1,1 +1,0 @@
-/usr/bin/c++ -Og -g -fsanitize=address,undefined CMakeFiles/bttManager.dir/src/bttManager_main.cpp.o CMakeFiles/bttManager.dir/src/lib_bttManager.cpp.o CMakeFiles/bttManager.dir/src/bttParser.cpp.o CMakeFiles/bttManager.dir/src/tagManager.cpp.o -o bttManager  /usr/local/lib/libtag.a /usr/lib/x86_64-linux-gnu/libz.so

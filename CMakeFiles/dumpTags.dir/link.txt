@@ -1,1 +1,0 @@
-/usr/bin/c++ -Og -g -fsanitize=address,undefined CMakeFiles/dumpTags.dir/src/dumpTags.cpp.o CMakeFiles/dumpTags.dir/src/tagManager.cpp.o -o dumpTags  /usr/local/lib/libtag.a /usr/lib/x86_64-linux-gnu/libz.so

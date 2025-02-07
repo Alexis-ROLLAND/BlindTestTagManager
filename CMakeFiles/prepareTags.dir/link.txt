@@ -1,1 +1,0 @@
-/usr/bin/c++ -Og -g -fsanitize=address,undefined CMakeFiles/prepareTags.dir/src/prepareTags.cpp.o CMakeFiles/prepareTags.dir/src/tagManager.cpp.o -o prepareTags  /usr/local/lib/libtag.a /usr/lib/x86_64-linux-gnu/libz.so
